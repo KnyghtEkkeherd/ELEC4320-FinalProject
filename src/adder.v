@@ -28,7 +28,7 @@ module ripple_carry_adder #(parameter NUM_BITS = 32)(
 wire [NUM_BITS-1:0] carry_wire;
 genvar i;
 generate
-    for (i = 0; i < NUM_BITS; i = i + 1) begin : full_adder_loop
+    for (i = 0; i < NUM_BITS; i = i + 1) begin
         if (i == 0) begin
             full_adder fa (
                 .A(A[i]),
@@ -37,7 +37,8 @@ generate
                 .Carry_out(carry_wire[i]),
                 .Sum(Sum[i])
             );
-        end else if (i == NUM_BITS-1) begin
+        end
+        else if (i == NUM_BITS-1) begin
             full_adder fa (
                 .A(A[i]),
                 .B(B[i]),
@@ -45,7 +46,8 @@ generate
                 .Carry_out(C_out),
                 .Sum(Sum[i])
             );
-        end else begin
+        end
+        else begin
             full_adder fa (
                 .A(A[i]),
                 .B(B[i]),
