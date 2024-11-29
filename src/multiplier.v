@@ -10,7 +10,8 @@ module multiplier (
     input [31:0] B,
     input clk,
     input reset,
-    output [63:0] P
+    output [63:0] P,
+    output ready
 );
 
     reg [63:0] product;
