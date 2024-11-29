@@ -9,12 +9,23 @@ module multiplier (
     input [31:0] A,
     input [31:0] B,
     input clk,
+    input reset,
     output [63:0] P
 );
 
-    reg P;
-    always @(posedge clk) begin
+    reg [63:0] product;
+    assign P = product;
 
+    initial begin
+        product <= 64'b0;
+    end
+
+    always @(posedge clk) begin
+        if (reset) begin
+            product <= 64'b0;
+        end else begin
+
+        end
     end
 
 endmodule
