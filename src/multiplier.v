@@ -4,54 +4,43 @@
 // Name: Wiktor Kowalczyk
 // Student ID: 20814029
 // Email: wmkowalczyk@connect.ust.hk
+// Little Endian 32-bit multiplier
 //////////////////////////////////////////////////////////////////////////////////
 
-module twoBitMultiplier (
-    input [1:0] A,
-    input [1:0] B,
-    input clk,
-    input reset,
-    output [3:0] C
-);
-    wire carry_wire;
-    assign C[0] = A[0] & B[0];
-    full_adder ha1 (
-        A[0] & B[1],
-        A[1] & B[0],
-        1'b0,
-        carry_wire,
-        C[1]
-    );
-    full_adder ha2 (
-        A[1] & B[1],
-        1'b0,
-        carry_wire,
-        C[3],
-        C[2]
-    );
-endmodule
-
-module multiplier32 (
+module multiplier (
     input [31:0] A,
     input [31:0] B,
     input clk,
+    input clear,
     input reset,
     output [63:0] C,
-    output ready
+    output reg ready
 );
-
+    reg [31:0] A_reg;
+    reg [31:0] B_reg;
     reg [63:0] C_reg;
-    assign C_reg = C;
-
-    initial begin
-        C_reg <= 64'b0;
-    end
+    reg [ 4:0] count;
+    assign C = C_reg;
 
     always @(posedge clk) begin
-        if (reset) begin
+        if (reset || clear) begin
+            A_reg <= A;
+            B_reg <= B;
             C_reg <= 64'b0;
+            count <= 5'b0;
+            ready <= 1'b0;
+        end else if (count < 32) begin
+            if (B_reg[0] == 1) begin
+                C_reg <= C_reg + A_reg;
+            end
+
+            C_reg <= C_reg >> 1;
+            B_reg <= B_reg >> 1;
+            count <= count + 1;
         end else begin
-            // TODO: finish the connections
+            ready <= 1'b1;
         end
+
     end
+
 endmodule
