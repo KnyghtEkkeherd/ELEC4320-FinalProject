@@ -1,5 +1,4 @@
 `timescale 1ns / 1ps
-`include "control_states.v"
 //////////////////////////////////////////////////////////////////////////////////
 // Name: Wiktor Kowalczyk
 // Student ID: 20814029
@@ -55,6 +54,7 @@ module debouncing_circuit (
     end
 
 endmodule
+
 
 // the main data input circuit
 module data_input (
