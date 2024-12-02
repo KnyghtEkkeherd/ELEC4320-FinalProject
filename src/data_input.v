@@ -7,15 +7,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 // slow clock for the debouncing circuit
-module clk_1Hz (
+module slow_clk (
     input  clk,
     input  reset,
-    output slow_clk
+    output slow_clk_out
 );
     // input 100MHz clock
     // output 1Hz clock
 
     reg [26:0] counter;
+    reg slow_clk;
+    assign slow_clk_out = slow_clk;
+
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             counter  <= 0;
@@ -70,15 +73,22 @@ module data_input (
     reg deb_R;
     reg deb_U;
     reg deb_D;
-    reg [15:0] input_data_A;  // 16 bit input data
-    reg [15:0] input_data_B;  // 16 bit input data
+    reg [15:0] input_data;  // 16 bit input data
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
 
-    clk_1Hz slow_clk_inst (
+    blk_mem_gen_0 BRAMROM (
+        .clka (clk),
+        .wea  (1'b1),                  // Write enable
+        .addra(input_status ? 1 : 0),  // Address: 0 for A, 1 for B
+        .dina (input_data),            // Data input
+        .ena  (1'b1)                   // Enable the BRAM
+    );
+
+    slow_clk slow_clk_inst (
         .clk(clk),
         .reset(reset),
-        .slow_clk(slow_clk_signal)
+        .slow_clk_out(slow_clk_signal)
     );
 
     // Debouncing the buttons
@@ -126,10 +136,9 @@ module data_input (
             deb_L <= 0;
             deb_R <= 0;
             deb_D <= 0;
-            input_data_A <= 0;
-            input_data_B <= 0;
+            input_data <= 0;
             input_status <= 0;
-        end else if (debounced_buttons) begin
+        end else begin
             if (bt_C) begin
                 input_status <= ~input_status;
             end else if (bt_L) begin
@@ -145,52 +154,26 @@ module data_input (
                     unit <= 4;
                 end
             end else if (bt_U) begin
-                if (input_status == 0) begin
-                    // increment of A
-                    if (unit == 0) begin
-                        if (input_data_A < 999) input_data_A <= input_data_A + 1;
-                    end else if (unit == 1) begin
-                        if (input_data_A <= 989) input_data_A <= input_data_A + 10;
-                    end else if (unit == 2) begin
-                        if (input_data_A <= 899) input_data_A <= input_data_A + 100;
-                    end else if (unit == 3) begin
-                        if (input_data_A <= -1) input_data_A <= input_data_A + 1000;
-                    end
-                end else begin
-                    // increment of B
-                    if (unit == 0) begin
-                        if (input_data_B < 999) input_data_B <= input_data_B + 1;
-                    end else if (unit == 1) begin
-                        if (input_data_B <= 989) input_data_B <= input_data_B + 10;
-                    end else if (unit == 2) begin
-                        if (input_data_B <= 899) input_data_B <= input_data_B + 100;
-                    end else if (unit == 3) begin
-                        if (input_data_B <= -1) input_data_B <= input_data_B + 1000;
-                    end
+                // increment of input_data
+                if (unit == 0) begin
+                    if (input_data < 999) input_data <= input_data + 1;
+                end else if (unit == 1) begin
+                    if (input_data <= 989) input_data <= input_data + 10;
+                end else if (unit == 2) begin
+                    if (input_data <= 899) input_data <= input_data + 100;
+                end else if (unit == 3) begin
+                    if (input_data <= -1) input_data <= input_data + 1000;
                 end
             end else if (bt_D) begin
-                if (input_status == 0) begin
-                    // decrement of A
-                    if (unit == 0) begin
-                        if (input_data_A > -999) input_data_A <= input_data_A - 1;
-                    end else if (unit == 1) begin
-                        if (input_data_A >= -989) input_data_A <= input_data_A - 10;
-                    end else if (unit == 2) begin
-                        if (input_data_A >= -899) input_data_A <= input_data_A - 100;
-                    end else if (unit == 3) begin
-                        if (input_data_A >= 1000) input_data_A <= input_data_A - 1000;
-                    end
-                end else begin
-                    // decrement of B
-                    if (unit == 0) begin
-                        if (input_data_B > -999) input_data_B <= input_data_B - 1;
-                    end else if (unit == 1) begin
-                        if (input_data_B >= -989) input_data_B <= input_data_B - 10;
-                    end else if (unit == 2) begin
-                        if (input_data_B >= -899) input_data_B <= input_data_B - 100;
-                    end else if (unit == 3) begin
-                        if (input_data_B >= 1000) input_data_B <= input_data_B - 1000;
-                    end
+                // decrement of input_data
+                if (unit == 0) begin
+                    if (input_data > -999) input_data <= input_data - 1;
+                end else if (unit == 1) begin
+                    if (input_data >= -989) input_data <= input_data - 10;
+                end else if (unit == 2) begin
+                    if (input_data >= -899) input_data <= input_data - 100;
+                end else if (unit == 3) begin
+                    if (input_data >= 1) input_data <= input_data - 1000;
                 end
             end
         end
