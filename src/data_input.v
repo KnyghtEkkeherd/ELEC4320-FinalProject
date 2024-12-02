@@ -62,22 +62,26 @@ module data_input (
 
     wire slow_clk_signal;
     reg [4:0] debounced_buttons;
+    reg [] unit;
+    reg [15:0] input_data;  // 16 bit input data
 
     slow_clk slow_clk_inst (
         .clk(clk),
-        .reset(reset)
+        .reset(reset),
         .slow_clk(slow_clk_signal)
     );
 
     always @(posedge clk) begin
+        debouncing_circuit(buttons_in[0], slow_clk_signal, reset, debounced_buttons[0]);
+        debouncing_circuit(buttons_in[1], slow_clk_signal, reset, debounced_buttons[1]);
+        debouncing_circuit(buttons_in[2], slow_clk_signal, reset, debounced_buttons[2]);
+        debouncing_circuit(buttons_in[3], slow_clk_signal, reset, debounced_buttons[3]);
+        debouncing_circuit(buttons_in[4], slow_clk_signal, reset, debounced_buttons[4]);
         if (reset) begin
             debounced_buttons <= 0;
-        end else begin
-            debouncing_circuit(buttons_in[0], slow_clk_signal, reset, debounced_buttons[0]);
-            debouncing_circuit(buttons_in[1], slow_clk_signal, reset, debounced_buttons[1]);
-            debouncing_circuit(buttons_in[2], slow_clk_signal, reset, debounced_buttons[2]);
-            debouncing_circuit(buttons_in[3], slow_clk_signal, reset, debounced_buttons[3]);
-            debouncing_circuit(buttons_in[4], slow_clk_signal, reset, debounced_buttons[4]);
+            input_data <= 0;
+        end else if (debounced_buttons) begin
+
         end
     end
 
