@@ -146,6 +146,7 @@ module data_input (
                 end
             end else if (bt_U) begin
                 if (input_status == 0) begin
+                    // increment of A
                     if (unit == 0) begin
                         if (input_data_A < 999) input_data_A <= input_data_A + 1;
                     end else if (unit == 1) begin
@@ -156,6 +157,7 @@ module data_input (
                         if (input_data_A <= -1) input_data_A <= input_data_A + 1000;
                     end
                 end else begin
+                    // increment of B
                     if (unit == 0) begin
                         if (input_data_B < 999) input_data_B <= input_data_B + 1;
                     end else if (unit == 1) begin
@@ -168,6 +170,7 @@ module data_input (
                 end
             end else if (bt_D) begin
                 if (input_status == 0) begin
+                    // decrement of A
                     if (unit == 0) begin
                         if (input_data_A > -999) input_data_A <= input_data_A - 1;
                     end else if (unit == 1) begin
@@ -178,6 +181,7 @@ module data_input (
                         if (input_data_A >= 1000) input_data_A <= input_data_A - 1000;
                     end
                 end else begin
+                    // decrement of B
                     if (unit == 0) begin
                         if (input_data_B > -999) input_data_B <= input_data_B - 1;
                     end else if (unit == 1) begin
