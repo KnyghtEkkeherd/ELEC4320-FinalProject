@@ -138,6 +138,7 @@ module data_input (
             deb_D <= 0;
             input_data <= 0;
             input_status <= 0;
+            unit <= 0;
         end else begin
             if (bt_C) begin
                 input_status <= ~input_status;
