@@ -75,11 +75,24 @@ module data_input (
 
     wire slow_clk_signal;
     // debounced values of the buttons
-    reg deb_C;
-    reg deb_L;
-    reg deb_R;
-    reg deb_U;
-    reg deb_D;
+    reg  deb_C;
+    reg  deb_L;
+    reg  deb_R;
+    reg  deb_U;
+    reg  deb_D;
+    // assign wires to registers from the debouncing circuit
+    wire deb_C_out;
+    wire deb_L_out;
+    wire deb_R_out;
+    wire deb_U_out;
+    wire deb_D_out;
+
+    assign deb_C = deb_C_out;
+    assign deb_L = deb_L_out;
+    assign deb_R = deb_R_out;
+    assign deb_U = deb_U_out;
+    assign deb_D = deb_D_out;
+
     reg [15:0] input_data;  // 16 bit input data
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
@@ -114,35 +127,35 @@ module data_input (
         .button_in(bt_C),
         .slow_clk(slow_clk_signal),
         .reset(reset),
-        .button_out(deb_C)
+        .button_out(deb_C_out)
     );
 
     debouncing_circuit deb_L_inst (
         .button_in(bt_L),
         .slow_clk(slow_clk_signal),
         .reset(reset),
-        .button_out(deb_L)
+        .button_out(deb_L_out)
     );
 
     debouncing_circuit deb_R_inst (
         .button_in(bt_R),
         .slow_clk(slow_clk_signal),
         .reset(reset),
-        .button_out(deb_R)
+        .button_out(deb_R_out)
     );
 
     debouncing_circuit deb_U_inst (
         .button_in(bt_U),
         .slow_clk(slow_clk_signal),
         .reset(reset),
-        .button_out(deb_U)
+        .button_out(deb_U_out)
     );
 
     debouncing_circuit deb_D_inst (
         .button_in(bt_D),
         .slow_clk(slow_clk_signal),
         .reset(reset),
-        .button_out(deb_D)
+        .button_out(deb_D_out)
     );
     // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
     // Handle the data input
