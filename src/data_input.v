@@ -70,7 +70,7 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output [3:0] thousands_out
+    output thousands_out  // sign signal of the inputs
 );
 
     wire slow_clk_signal;
@@ -88,7 +88,7 @@ module data_input (
     reg [3:0] ones;
     reg [3:0] tens;
     reg [3:0] hundreds;
-    reg [3:0] thousands;
+    reg thousands;  // used to show whether the number is positive or negative
 
     assign ones_out = ones;
     assign tens_out = tens;
@@ -149,6 +149,7 @@ module data_input (
     always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
+            // flush debounced button registers
             deb_C <= 0;
             deb_U <= 0;
             deb_L <= 0;
@@ -157,10 +158,17 @@ module data_input (
             input_data <= 0;
             input_status <= 0;
             unit <= 0;
+
+            // flush the registers that take count of the digits
+            ones <= 0;
+            tens <= 0;
+            hundreds <= 0;
+            thousands <= 0;  // thousands 0-positive, 1-negative
         end else begin
             if (bt_C) begin
                 input_status <= ~input_status;
             end else if (bt_L) begin
+                // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin
                     unit <= unit + 1;
                 end else begin
@@ -174,25 +182,30 @@ module data_input (
                 end
             end else if (bt_U) begin
                 // increment of input_data
-                if (unit == 0) begin
+                if (unit == 0 && ones <= 9) begin
                     if (input_data < 999) input_data <= input_data + 1;
-                end else if (unit == 1) begin
+                    ones <= ones + 1;
+                end else if (unit == 1 && tens <= 9) begin
                     if (input_data <= 989) input_data <= input_data + 10;
-                end else if (unit == 2) begin
+                    tens <= tens + 1;
+                end else if (unit == 2 && hundreds <= 9) begin
                     if (input_data <= 899) input_data <= input_data + 100;
+                    hundreds <= hundreds + 1;
                 end else if (unit == 3) begin
-                    if (input_data <= -1) input_data <= input_data + 1000;
+                    thousands  <= ~thousands;
+                    input_data <= -input_data;
                 end
             end else if (bt_D) begin
                 // decrement of input_data
-                if (unit == 0) begin
+                if (unit == 0 && ones > 0) begin
                     if (input_data > -999) input_data <= input_data - 1;
-                end else if (unit == 1) begin
+                end else if (unit == 1 && tens > 0) begin
                     if (input_data >= -989) input_data <= input_data - 10;
-                end else if (unit == 2) begin
+                end else if (unit == 2 && hundreds > 0) begin
                     if (input_data >= -899) input_data <= input_data - 100;
                 end else if (unit == 3) begin
-                    if (input_data >= 1) input_data <= input_data - 1000;
+                    thousands  <= ~thousands;
+                    input_data <= -input_data;
                 end
             end
         end
