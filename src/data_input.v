@@ -183,14 +183,20 @@ module data_input (
             end else if (bt_U) begin
                 // increment of input_data
                 if (unit == 0 && ones <= 9) begin
-                    if (input_data < 999) input_data <= input_data + 1;
-                    ones <= ones + 1;
+                    if (input_data < 999) begin
+                        input_data <= input_data + 1;
+                        ones <= ones + 1;
+                    end
                 end else if (unit == 1 && tens <= 9) begin
-                    if (input_data <= 989) input_data <= input_data + 10;
-                    tens <= tens + 1;
+                    if (input_data <= 989) begin
+                        input_data <= input_data + 10;
+                        tens <= tens + 1;
+                    end
                 end else if (unit == 2 && hundreds <= 9) begin
-                    if (input_data <= 899) input_data <= input_data + 100;
-                    hundreds <= hundreds + 1;
+                    if (input_data <= 899) begin
+                        input_data <= input_data + 100;
+                        hundreds   <= hundreds + 1;
+                    end
                 end else if (unit == 3) begin
                     thousands  <= ~thousands;
                     input_data <= -input_data;
@@ -198,11 +204,20 @@ module data_input (
             end else if (bt_D) begin
                 // decrement of input_data
                 if (unit == 0 && ones > 0) begin
-                    if (input_data > -999) input_data <= input_data - 1;
+                    if (input_data > -999) begin
+                        input_data <= input_data - 1;
+                        ones <= ones - 1;
+                    end
                 end else if (unit == 1 && tens > 0) begin
-                    if (input_data >= -989) input_data <= input_data - 10;
+                    if (input_data >= -989) begin
+                        input_data <= input_data - 10;
+                        tens <= tens - 1;
+                    end
                 end else if (unit == 2 && hundreds > 0) begin
-                    if (input_data >= -899) input_data <= input_data - 100;
+                    if (input_data >= -899) begin
+                        input_data <= input_data - 100;
+                        hundreds   <= hundreds - 1;
+                    end
                 end else if (unit == 3) begin
                     thousands  <= ~thousands;
                     input_data <= -input_data;
