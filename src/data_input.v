@@ -170,9 +170,10 @@ module data_input (
             deb_R <= 0;
             deb_D <= 0;
             input_data <= 0;
+            input_data_A <= 0;
+            input_data_B <= 0;
             input_status <= 0;
             unit <= 0;
-
             // flush the registers that take count of the digits
             ones <= 0;
             tens <= 0;
