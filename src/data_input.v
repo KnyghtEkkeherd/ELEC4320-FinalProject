@@ -67,6 +67,8 @@ module data_input (
     input reset,
 
     // output data to be displayed to the 7-segment display
+    output [15:0] input_data_A_out,
+    output [15:0] input_data_B_out,
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
@@ -98,6 +100,9 @@ module data_input (
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
 
+    assign input_data_A_out = input_data_A;
+    assign input_data_B_out = input_data_B;
+
     // display outputs
     reg [3:0] ones;
     reg [3:0] tens;
@@ -108,14 +113,6 @@ module data_input (
     assign tens_out = tens;
     assign hundreds_out = hundreds;
     assign sign_out = sign;
-
-    blk_mem_gen_0 BRAMROM (
-        .clka (clk),
-        .wea  (1'b1),                  // Write enable
-        .addra(input_status ? 1 : 0),  // Address: 0 for A, 1 for B
-        .dina (input_data),            // Data input
-        .ena  (1'b1)                   // Enable the BRAM
-    );
 
     slow_clk slow_clk_inst (
         .clk(clk),
