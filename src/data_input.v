@@ -67,7 +67,10 @@ module data_input (
     input reset,
 
     // output data to be displayed to the 7-segment display
-    output [15:0] data_out
+    output [3:0] ones_out,
+    output [3:0] tens_out,
+    output [3:0] hundreds_out,
+    output [3:0] thousands_out
 );
 
     wire slow_clk_signal;
@@ -81,7 +84,16 @@ module data_input (
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
 
-    assign data_out = input_data;
+    // display outputs
+    reg [3:0] ones;
+    reg [3:0] tens;
+    reg [3:0] hundreds;
+    reg [3:0] thousands;
+
+    assign ones_out = ones;
+    assign tens_out = tens;
+    assign hundreds_out = hundreds;
+    assign thousands_out = thousands;
 
     blk_mem_gen_0 BRAMROM (
         .clka (clk),
@@ -132,7 +144,7 @@ module data_input (
         .reset(reset),
         .button_out(deb_D)
     );
-
+    // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
     // Handle the data input
     always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
         // Handle the displaying and storing of the input data
