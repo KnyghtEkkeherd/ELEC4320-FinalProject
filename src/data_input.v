@@ -72,7 +72,11 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output sign_out  // sign signal of the inputs
+    output sign_out,  // sign signal of the inputs
+    output LED10_out,  // LEDs to show the current digit to change
+    output LED11_out,
+    output LED12_out,
+    output LED13_out
 );
 
     wire slow_clk_signal;
@@ -113,6 +117,12 @@ module data_input (
     assign tens_out = tens;
     assign hundreds_out = hundreds;
     assign sign_out = sign;
+
+    reg LED10, LED11, LED12, LED13;
+    assign LED10_out = LED10;
+    assign LED11_out = LED11;
+    assign LED12_out = LED12;
+    assign LED13_out = LED13;
 
     slow_clk slow_clk_inst (
         .clk(clk),
@@ -157,7 +167,24 @@ module data_input (
     );
     // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
     // Handle the data input
-    always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
+    initial begin
+        deb_C <= 0;
+        deb_U <= 0;
+        deb_L <= 0;
+        deb_R <= 0;
+        deb_D <= 0;
+        input_data <= 0;
+        input_data_A <= 0;
+        input_data_B <= 0;
+        input_status <= 0;
+        unit <= 0;
+        ones <= 0;
+        tens <= 0;
+        hundreds <= 0;
+        sign <= 0;
+    end
+
+    always @(bt_C or bt_U or bt_L or bt_R or bt_D or posedge reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
             // flush debounced button registers
@@ -178,8 +205,8 @@ module data_input (
             sign <= 0;  // thousands 0-positive, 1-negative
         end else begin
             if (bt_C) begin
-                if (input_status) input_data_A <= input_data;
-                else input_data_B <= input_data;
+                if (input_status) input_data_B <= input_data;
+                else input_data_A <= input_data;
                 input_status <= ~input_status;
             end else if (bt_L) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
@@ -237,6 +264,15 @@ module data_input (
                     input_data <= -input_data;
                 end
             end
+        end
+    end
+
+    always @(posedge clk) begin
+        // output the data to the 7-segment display
+        if (input_status) begin
+            input_data_A <= input_data;
+        end else begin
+            input_data_B <= input_data;
         end
     end
 endmodule
