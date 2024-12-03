@@ -16,6 +16,8 @@ module top (
     wire w_10Hz;
     wire [3:0] w_1s, w_10s, w_100s, w_1000s;
     wire sign_signal;
+    wire bram_wea, bram_addra;
+    wire [15:0] input_data_A_out, input_data_B_out;
 
     // Instantiate inner design modules
     tenHz_gen hz10 (
@@ -32,15 +34,29 @@ module top (
         .bt_D(btnD),
         .clk(CKM100MHZ),
         .reset(reset),
+        .input_data_A_out(input_data_A_out),
+        .input_data_B_out(input_data_B_out),
+        .bram_wea(bram_wea),
+        .bram_addra(bram_addra),
         .ones_out(w_1s),
         .tens_out(w_10s),
         .hundreds_out(w_100s),
         .sign_out(sign_signal)
     );
 
+    // Instantiate BRAM
+    // TODO: finish BRAM instantiation and wiring
+    blk_mem_gen_0 data_storage (
+        .clka(CLK100MHZ),  // input wire clka
+        .rsta(reset),  // input wire rsta
+        .wea(bram_wea),  // input wire [0 : 0] wea
+        .addra(bram_addra),  // input wire [ADDR_WIDTH-1 : 0] addra
+        .dina(0),  // input wire [DATA_WIDTH-1 : 0] dina
+        .douta()  // output wire [DATA_WIDTH-1 : 0] douta
+    );
 
     seg7_control seg7 (
-        .clk_100MHz(CKM100MHZ),
+        .clk_100MHz(CLK100MHZ),
         .reset(reset),
         .ones(w_1s),
         .tens(w_10s),
