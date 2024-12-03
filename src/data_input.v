@@ -70,7 +70,7 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output thousands_out  // sign signal of the inputs
+    output sign_out  // sign signal of the inputs
 );
 
     wire slow_clk_signal;
@@ -88,12 +88,12 @@ module data_input (
     reg [3:0] ones;
     reg [3:0] tens;
     reg [3:0] hundreds;
-    reg thousands;  // used to show whether the number is positive or negative
+    reg sign;  // used to show whether the number is positive or negative
 
     assign ones_out = ones;
     assign tens_out = tens;
     assign hundreds_out = hundreds;
-    assign thousands_out = thousands;
+    assign sign_out = sign;
 
     blk_mem_gen_0 BRAMROM (
         .clka (clk),
@@ -163,7 +163,7 @@ module data_input (
             ones <= 0;
             tens <= 0;
             hundreds <= 0;
-            thousands <= 0;  // thousands 0-positive, 1-negative
+            sign <= 0;  // thousands 0-positive, 1-negative
         end else begin
             if (bt_C) begin
                 input_status <= ~input_status;
@@ -181,7 +181,7 @@ module data_input (
                     unit <= 4;
                 end
             end else if (bt_U) begin
-                // increment of input_data
+                // Increment of input_data
                 if (unit == 0 && ones <= 9) begin
                     if (input_data < 999) begin
                         input_data <= input_data + 1;
@@ -198,11 +198,11 @@ module data_input (
                         hundreds   <= hundreds + 1;
                     end
                 end else if (unit == 3) begin
-                    thousands  <= ~thousands;
+                    sign <= ~sign;
                     input_data <= -input_data;
                 end
             end else if (bt_D) begin
-                // decrement of input_data
+                // Decrement of input_data
                 if (unit == 0 && ones > 0) begin
                     if (input_data > -999) begin
                         input_data <= input_data - 1;
@@ -219,7 +219,7 @@ module data_input (
                         hundreds   <= hundreds - 1;
                     end
                 end else if (unit == 3) begin
-                    thousands  <= ~thousands;
+                    sign <= ~sign;
                     input_data <= -input_data;
                 end
             end
