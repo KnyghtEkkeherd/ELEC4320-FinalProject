@@ -69,8 +69,6 @@ module data_input (
     // outputs to write to BRAM
     output [15:0] input_data_out,
     output input_status_out,
-    output bram_wea,
-    output bram_addra,
     // outputs to display the digits
     output [3:0] ones_out,
     output [3:0] tens_out,
@@ -175,6 +173,12 @@ module data_input (
         end else begin
             if (deb_C_out) begin
                 input_status <= ~input_status;
+                input_data <= 0;
+                unit <= 0;
+                ones <= 0;
+                tens <= 0;
+                hundreds <= 0;
+                sign <= 0;
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin
