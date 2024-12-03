@@ -1,119 +1,69 @@
 `timescale 1ns / 1ps
 
+`timescale 1ns / 1ps
+    
 module seg7_control(
-    input clk_100MHz,
+    input clock,
     input reset,
-    input [3:0] ones,
-    input [3:0] tens,
-    input [3:0] hundreds,
-    input [3:0] thousands,
-    output reg [0:6] seg,       // segment pattern 0-9
-    output reg [3:0] digit      // digit select signals
-    );
-    
-    // Parameters for segment patterns
-    parameter ZERO  = 7'b000_0001;  // 0
-    parameter ONE   = 7'b100_1111;  // 1
-    parameter TWO   = 7'b001_0010;  // 2 
-    parameter THREE = 7'b000_0110;  // 3
-    parameter FOUR  = 7'b100_1100;  // 4
-    parameter FIVE  = 7'b010_0100;  // 5
-    parameter SIX   = 7'b010_0000;  // 6
-    parameter SEVEN = 7'b000_1111;  // 7
-    parameter EIGHT = 7'b000_0000;  // 8
-    parameter NINE  = 7'b000_0100;  // 9
-    
-    // To select each digit in turn
-    reg [1:0] digit_select;     // 2 bit counter for selecting each of 4 digits
-    reg [16:0] digit_timer;     // counter for digit refresh
-    
-    // Logic for controlling digit select and digit timer
-    always @(posedge clk_100MHz or posedge reset) begin
-        if(reset) begin
-            digit_select <= 0;
-            digit_timer <= 0; 
+    input [3:0] ones,       // Input for ones digit
+    input [3:0] tens,       // Input for tens digit
+    input [3:0] hundreds,   // Input for hundreds digit
+    input [3:0] thousands,   // Input for thousands digit
+    output reg [3:0] anode_activation,
+    output reg [6:0] LED_segment // corresponds to one of the 7-segments of the display
+);
+
+    reg [19:0] refresh_counter;
+    wire [1:0] LED_activating_counter;
+
+    always @(posedge clock or posedge reset) begin
+        if (reset) begin
+            refresh_counter <= 0;
+        end else begin
+            refresh_counter <= refresh_counter + 1;
         end
-        else                                        // 1ms x 4 displays = 4ms refresh period
-            if(digit_timer == 99_999) begin         // The period of 100MHz clock is 10ns (1/100,000,000 seconds)
-                digit_timer <= 0;                   // 10ns x 100,000 = 1ms
-                digit_select <=  digit_select + 1;
-            end
-            else
-                digit_timer <=  digit_timer + 1;
-    end
-    
-    // Logic for driving the 4 bit anode output based on digit select
-    always @(digit_select) begin
-        case(digit_select) 
-            2'b00 : digit = 4'b1110;   // Turn on ones digit
-            2'b01 : digit = 4'b1101;   // Turn on tens digit
-            2'b10 : digit = 4'b1011;   // Turn on hundreds digit
-            2'b11 : digit = 4'b0111;   // Turn on thousands digit
+    end 
+
+    assign LED_activating_counter = refresh_counter[19:18];
+
+    always @(*) begin
+        case(LED_activating_counter)
+        2'b00: begin
+            anode_activation = 4'b0111; 
+            LED_segment = decode_segment(thousands); // Display thousands
+        end
+        2'b01: begin
+            anode_activation = 4'b1011; 
+            LED_segment = decode_segment(hundreds); // Display hundreds
+        end
+        2'b10: begin
+            anode_activation = 4'b1101; 
+            LED_segment = decode_segment(tens); // Display tens
+        end
+        2'b11: begin
+            anode_activation = 4'b1110; 
+            LED_segment = decode_segment(ones); // Display ones
+        end
         endcase
     end
-    
-    // Logic for driving segments based on which digit is selected and the value of each digit
-    always @*
-        case(digit_select)
-            2'b00 : begin       // ONES DIGIT
-                        case(ones)
-                            4'b0000 : seg = ZERO;
-                            4'b0001 : seg = ONE;
-                            4'b0010 : seg = TWO;
-                            4'b0011 : seg = THREE;
-                            4'b0100 : seg = FOUR;
-                            4'b0101 : seg = FIVE;
-                            4'b0110 : seg = SIX;
-                            4'b0111 : seg = SEVEN;
-                            4'b1000 : seg = EIGHT;
-                            4'b1001 : seg = NINE;
-                        endcase
-                    end
-                    
-            2'b01 : begin       // TENS DIGIT
-                        case(tens)
-                            4'b0000 : seg = ZERO;
-                            4'b0001 : seg = ONE;
-                            4'b0010 : seg = TWO;
-                            4'b0011 : seg = THREE;
-                            4'b0100 : seg = FOUR;
-                            4'b0101 : seg = FIVE;
-                            4'b0110 : seg = SIX;
-                            4'b0111 : seg = SEVEN;
-                            4'b1000 : seg = EIGHT;
-                            4'b1001 : seg = NINE;
-                        endcase
-                    end
-                    
-            2'b10 : begin       // HUNDREDS DIGIT
-                        case(hundreds)
-                            4'b0000 : seg = ZERO;
-                            4'b0001 : seg = ONE;
-                            4'b0010 : seg = TWO;
-                            4'b0011 : seg = THREE;
-                            4'b0100 : seg = FOUR;
-                            4'b0101 : seg = FIVE;
-                            4'b0110 : seg = SIX;
-                            4'b0111 : seg = SEVEN;
-                            4'b1000 : seg = EIGHT;
-                            4'b1001 : seg = NINE;
-                        endcase
-                    end
-                    
-            2'b11 : begin       // MINUTES ONES DIGIT
-                        case(thousands)
-                            4'b0000 : seg = ZERO;
-                            4'b0001 : seg = ONE;
-                            4'b0010 : seg = TWO;
-                            4'b0011 : seg = THREE;
-                            4'b0100 : seg = FOUR;
-                            4'b0101 : seg = FIVE;
-                            4'b0110 : seg = SIX;
-                            4'b0111 : seg = SEVEN;
-                            4'b1000 : seg = EIGHT;
-                            4'b1001 : seg = NINE;
-                        endcase
-                    end
-        endcase
+
+    function [6:0] decode_segment(input [3:0] value);
+        begin
+            case(value)
+            4'b0000: decode_segment = 7'b0000001; // "0"     
+            4'b0001: decode_segment = 7'b1001111; // "1" 
+            4'b0010: decode_segment = 7'b0010010; // "2" 
+            4'b0011: decode_segment = 7'b0000110; // "3" 
+            4'b0100: decode_segment = 7'b1001100; // "4" 
+            4'b0101: decode_segment = 7'b0100100; // "5" 
+            4'b0110: decode_segment = 7'b0100000; // "6" 
+            4'b0111: decode_segment = 7'b0001111; // "7" 
+            4'b1000: decode_segment = 7'b0000000; // "8"     
+            4'b1001: decode_segment = 7'b0000100; // "9" 
+            4'b1010: decode_segment = 7'b1111110; // "-" 
+            default: decode_segment = 7'b0000001; // "0"
+            endcase
+        end
+    endfunction
 
 endmodule

@@ -30,7 +30,7 @@ module top (
         .bt_L(btnL),
         .bt_R(btnR),
         .bt_D(btnD),
-        .clk(CKM100MHZ),
+        .clk(CLK100MHZ),
         .reset(reset),
         .ones_out(w_1s),
         .tens_out(w_10s),
@@ -40,14 +40,14 @@ module top (
 
 
     seg7_control seg7 (
-        .clk_100MHz(CKM100MHZ),
+        .clock(CLK100MHZ),
         .reset(reset),
         .ones(w_1s),
         .tens(w_10s),
         .hundreds(w_100s),
         .thousands(3'b000),  // Change this line later to display the sign
-        .seg(seg),
-        .digit(digit)
+        .LED_segment(seg),
+        .anode_activation(digit)
     );
 
 endmodule
