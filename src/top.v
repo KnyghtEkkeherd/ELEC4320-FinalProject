@@ -3,6 +3,11 @@
 module top (
     input        CLK100MHZ,  // from Basys 3
     input        reset,      // btnC
+    input        btnU,       // up
+    input        btnL,       // left
+    input        btnR,       // right
+    input        btnD,       // down
+    input        btnC,       // center
     output [0:6] seg,        // 7 segment display segment pattern
     output [3:0] digit       // 7 segment display anodes
 );
@@ -14,7 +19,7 @@ module top (
 
     // Instantiate inner design modules
     tenHz_gen hz10 (
-        .clk_100MHz(clk_100MHz),
+        .clk_100MHz(CLK100MHZ),
         .reset(reset),
         .clk_10Hz(w_10Hz)
     );
@@ -25,7 +30,7 @@ module top (
         .bt_L(btnL),
         .bt_R(btnR),
         .bt_D(btnD),
-        .clk(clk_100MHz),
+        .clk(CKM100MHZ),
         .reset(reset),
         .ones_out(w_1s),
         .tens_out(w_10s),
@@ -35,7 +40,7 @@ module top (
 
 
     seg7_control seg7 (
-        .clk_100MHz(clk_100MHz),
+        .clk_100MHz(CKM100MHZ),
         .reset(reset),
         .ones(w_1s),
         .tens(w_10s),
