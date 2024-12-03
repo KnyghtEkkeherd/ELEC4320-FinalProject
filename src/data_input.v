@@ -91,9 +91,10 @@ module data_input (
     assign deb_L_out = deb_L;
     assign deb_R_out = deb_R;
     assign deb_U_out = deb_U;
-    assign deb_D_out = deb_D;
 
     reg [15:0] input_data;  // 16 bit input data
+    reg [15:0] input_data_A;
+    reg [15:0] input_data_B;
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
 
@@ -108,9 +109,13 @@ module data_input (
     assign hundreds_out = hundreds;
     assign sign_out = sign;
 
-    // Register arrays to store inputA and inputB
-    reg [15:0] inputA;
-    reg [15:0] inputB;
+    blk_mem_gen_0 BRAMROM (
+        .clka (clk),
+        .wea  (1'b1),                  // Write enable
+        .addra(input_status ? 1 : 0),  // Address: 0 for A, 1 for B
+        .dina (input_data),            // Data input
+        .ena  (1'b1)                   // Enable the BRAM
+    );
 
     slow_clk slow_clk_inst (
         .clk(clk),
@@ -153,6 +158,7 @@ module data_input (
         .reset(reset),
         .button_out(deb_D_out)
     );
+    // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
     // Handle the data input
     always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
         // Handle the displaying and storing of the input data
@@ -172,12 +178,10 @@ module data_input (
             tens <= 0;
             hundreds <= 0;
             sign <= 0;  // thousands 0-positive, 1-negative
-
-            // flush the inputA and inputB registers
-            inputA <= 0;
-            inputB <= 0;
         end else begin
             if (bt_C) begin
+                if (input_status) input_data_A <= input_data;
+                else input_data_B <= input_data;
                 input_status <= ~input_status;
             end else if (bt_L) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
@@ -234,13 +238,6 @@ module data_input (
                     sign <= ~sign;
                     input_data <= -input_data;
                 end
-            end
-
-            // Store input_data into inputA or inputB based on input_status
-            if (input_status == 0) begin
-                inputA <= input_data;
-            end else begin
-                inputB <= input_data;
             end
         end
     end
