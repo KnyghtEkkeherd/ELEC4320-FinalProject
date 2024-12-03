@@ -68,6 +68,7 @@ module data_input (
 );
 
     wire slow_clk_signal;
+    // debounced values of the buttons
     reg deb_C;
     reg deb_L;
     reg deb_R;
