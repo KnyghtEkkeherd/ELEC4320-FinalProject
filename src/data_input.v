@@ -64,7 +64,10 @@ module data_input (
     input bt_R,
     input bt_D,
     input clk,
-    input reset
+    input reset,
+
+    // output data to be displayed to the 7-segment display
+    output [15:0] data_out
 );
 
     wire slow_clk_signal;
@@ -77,6 +80,8 @@ module data_input (
     reg [15:0] input_data;  // 16 bit input data
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
+
+    assign data_out = input_data;
 
     blk_mem_gen_0 BRAMROM (
         .clka (clk),
@@ -180,5 +185,4 @@ module data_input (
             end
         end
     end
-
 endmodule
