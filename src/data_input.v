@@ -87,11 +87,11 @@ module data_input (
     wire deb_U_out;
     wire deb_D_out;
 
-    assign deb_C = deb_C_out;
-    assign deb_L = deb_L_out;
-    assign deb_R = deb_R_out;
-    assign deb_U = deb_U_out;
-    assign deb_D = deb_D_out;
+    assign deb_C_out = deb_C;
+    assign deb_L_out = deb_L;
+    assign deb_R_out = deb_R;
+    assign deb_U_out = deb_U;
+    assign deb_D_out = deb_D;
 
     reg [15:0] input_data;  // 16 bit input data
     reg input_status;  // 0-A, 1-B
