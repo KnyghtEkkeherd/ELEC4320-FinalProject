@@ -108,13 +108,9 @@ module data_input (
     assign hundreds_out = hundreds;
     assign sign_out = sign;
 
-    blk_mem_gen_0 BRAMROM (
-        .clka (clk),
-        .wea  (1'b1),                  // Write enable
-        .addra(input_status ? 1 : 0),  // Address: 0 for A, 1 for B
-        .dina (input_data),            // Data input
-        .ena  (1'b1)                   // Enable the BRAM
-    );
+    // Register arrays to store inputA and inputB
+    reg [15:0] inputA;
+    reg [15:0] inputB;
 
     slow_clk slow_clk_inst (
         .clk(clk),
@@ -157,7 +153,6 @@ module data_input (
         .reset(reset),
         .button_out(deb_D_out)
     );
-    // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
     // Handle the data input
     always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
         // Handle the displaying and storing of the input data
@@ -177,6 +172,10 @@ module data_input (
             tens <= 0;
             hundreds <= 0;
             sign <= 0;  // thousands 0-positive, 1-negative
+
+            // flush the inputA and inputB registers
+            inputA <= 0;
+            inputB <= 0;
         end else begin
             if (bt_C) begin
                 input_status <= ~input_status;
@@ -235,6 +234,13 @@ module data_input (
                     sign <= ~sign;
                     input_data <= -input_data;
                 end
+            end
+
+            // Store input_data into inputA or inputB based on input_status
+            if (input_status == 0) begin
+                inputA <= input_data;
+            end else begin
+                inputB <= input_data;
             end
         end
     end
