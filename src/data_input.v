@@ -144,11 +144,6 @@ module data_input (
 
     // Handle the data input
     initial begin
-        deb_C <= 0;
-        deb_U <= 0;
-        deb_L <= 0;
-        deb_R <= 0;
-        deb_D <= 0;
         input_data <= 0;
         input_status <= 0;
         unit <= 0;
@@ -158,7 +153,7 @@ module data_input (
         sign <= 0;
     end
 
-    always @(deb_C_out or deb_U_out or deb_R_out or deb_L_out or deb_D_out or posedge reset) begin
+    always @(deb_C_out or deb_U_out or deb_R_out or deb_L_out or deb_D_out or reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
             input_data <= 0;
@@ -235,3 +230,4 @@ module data_input (
             end
         end
     end
+endmodule
