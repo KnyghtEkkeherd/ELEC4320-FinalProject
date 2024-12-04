@@ -196,6 +196,7 @@ module tb_top;
         #1_000_000;
         btnU = 0;
         #1_000_000;
+
         // test DOWN Button
         btnD = 1;
         #1_000_000;
