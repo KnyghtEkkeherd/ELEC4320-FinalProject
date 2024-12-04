@@ -75,7 +75,7 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output sign_out
+    output [3:0] sign_out
 );
 
     wire slow_clk_signal;
@@ -93,7 +93,7 @@ module data_input (
     reg [3:0] ones;
     reg [3:0] tens;
     reg [3:0] hundreds;
-    reg sign;  // used to show whether the number is positive or negative
+    reg [3:0] sign;  // used to show whether the number is positive or negative
 
     assign input_data_out = input_data;
     assign input_status_out = input_status;
@@ -199,7 +199,11 @@ module data_input (
                     input_data <= input_data + 100;
                     hundreds   <= hundreds + 1;
                 end else if (unit == 3) begin
-                    sign <= ~sign;
+                    case (sign)
+                        4'b1010: sign <= 4'b0000;
+                        4'b0000: sign <= 4'b1010;
+                        default: sign <= 4'b0000;
+                    endcase
                     input_data <= -input_data;
                 end
             end else if (deb_D_out) begin
@@ -214,7 +218,11 @@ module data_input (
                     input_data <= input_data - 100;
                     hundreds   <= hundreds - 1;
                 end else if (unit == 3) begin
-                    sign <= ~sign;
+                    case (sign)
+                        4'b1010: sign <= 4'b0000;
+                        4'b0000: sign <= 4'b1010;
+                        default: sign <= 4'b0000;
+                    endcase
                     input_data <= -input_data;
                 end
             end
