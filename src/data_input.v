@@ -158,7 +158,7 @@ module data_input (
         sign <= 0;
     end
 
-    always @(deb_C_out or deb_U_out or deb_R_out or deb_L_out or deb_D_out or reset) begin
+    always @(*) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
             input_data <= 0;

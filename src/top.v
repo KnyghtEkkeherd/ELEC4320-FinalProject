@@ -2,7 +2,7 @@
 
 module top (
     input        CLK100MHZ,  // from Basys 3
-    input        reset,      // btnC
+    //input        reset,      // btnC
     input        btnU,       // up
     input        btnL,       // left
     input        btnR,       // right
@@ -21,7 +21,7 @@ module top (
     // Instantiate inner design modules
     tenHz_gen hz10 (
         .clk_100MHz(CLK100MHZ),
-        .reset(reset),
+        .reset(1'b0),
         .clk_10Hz(w_10Hz)
     );
 
@@ -32,7 +32,7 @@ module top (
         .bt_R(btnR),
         .bt_D(btnD),
         .clk(CLK100MHZ),
-        .reset(reset),
+        .reset(1'b0),
         .input_data_out(input_data_out),
         .ones_out(w_1s),
         .tens_out(w_10s),
@@ -42,7 +42,7 @@ module top (
 
     seg7_control seg7 (
         .clock(CLK100MHZ),
-        .reset(reset),
+        .reset(1'b0),
         .ones(w_1s),
         .tens(w_10s),
         .hundreds(w_100s),
