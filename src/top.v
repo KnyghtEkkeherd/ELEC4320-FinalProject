@@ -47,7 +47,7 @@ module top (
         .ones(w_1s),
         .tens(w_10s),
         .hundreds(w_100s),
-        .thousands(3'b000),  // Change this line later to display the sign
+        .thousands({3'b000, sign_signal}),
         .LED_segment(seg),
         .anode_activation(digit)
     );
