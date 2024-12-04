@@ -9,7 +9,8 @@ module top (
     input        btnD,       // down
     input        btnC,       // center
     output [0:6] seg,        // 7 segment display segment pattern
-    output [3:0] digit       // 7 segment display anodes
+    output [3:0] digit,      // 7 segment display anodes
+    output [0:3] an          // 4 anodes for 7-segment display
 );
 
     // Internal wires for connecting inner modules

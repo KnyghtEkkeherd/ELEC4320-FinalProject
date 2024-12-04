@@ -73,8 +73,7 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output sign_out,
-    output [3:0] ans, // Dots on the segment display
+    output sign_out
 );
 
     wire slow_clk_signal;
