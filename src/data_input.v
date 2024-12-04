@@ -162,11 +162,9 @@ module data_input (
     always @(deb_C_out or deb_U_out or deb_R_out or deb_L_out or deb_D_out or posedge reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
-            // flush debounced button registers
             input_data <= 0;
             input_status <= 0;
             unit <= 0;
-            // flush the registers that take count of the digits
             ones <= 0;
             tens <= 0;
             hundreds <= 0;
