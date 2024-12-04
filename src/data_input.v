@@ -12,7 +12,7 @@ module slow_clk (
     output slow_clk_out
 );
     // input 100MHz clock
-    // output 1Hz clock
+    // output 1kHz clock
 
     reg [26:0] counter;
     reg slow_clk;
@@ -22,7 +22,7 @@ module slow_clk (
         if (reset) begin
             counter  <= 0;
             slow_clk <= 0;
-        end else if (counter == 49999999) begin
+        end else if (counter == 49_999) begin
             counter  <= 0;
             slow_clk <= ~slow_clk;
         end else begin
