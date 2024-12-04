@@ -1,9 +1,8 @@
 `timescale 1ns / 1ps
-`include "adder.v"
 
 // Bingo bango bongo boom boom boom skrrrrra
 
-module multiplier (
+module signed_multiplier (
     input signed [15:0] A,
     input signed [15:0] B,
     input clk,
