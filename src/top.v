@@ -9,8 +9,7 @@ module top (
     input        btnD,       // down
     input        btnC,       // center
     output [0:6] seg,        // 7 segment display segment pattern
-    output [3:0] digit,      // 7 segment display anodes
-    output [0:3] an          // 4 anodes for 7-segment display
+    output [3:0] an          // 7 segment display anodes
 );
 
     // Internal wires for connecting inner modules
@@ -49,7 +48,7 @@ module top (
         .hundreds(w_100s),
         .thousands({3'b000, sign_signal}),
         .LED_segment(seg),
-        .anode_activation(digit)
+        .anode_activation(an)
     );
 
 endmodule
