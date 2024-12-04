@@ -65,7 +65,6 @@ module data_input (
     input bt_D,
     input clk,
     input reset,
-    input [3:0] ans, // Dots on the segment display
 
     // outputs to write to BRAM
     output [15:0] input_data_out,
@@ -74,7 +73,8 @@ module data_input (
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output sign_out
+    output sign_out,
+    output [3:0] ans, // Dots on the segment display
 );
 
     wire slow_clk_signal;
