@@ -43,6 +43,11 @@ module debouncing_circuit (
 
     assign button_out = ff1 & ~ff2;
 
+    initial begin
+        ff1 <= 0;
+        ff2 <= 0;
+    end
+
     always @(posedge slow_clk) begin
         if (reset) begin
             ff1 <= 0;
