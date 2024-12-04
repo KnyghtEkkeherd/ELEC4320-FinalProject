@@ -14,7 +14,7 @@ module slow_clk (
     // input 100MHz clock
     // output 1kHz clock
 
-    reg [26:0] counter;
+    reg [16:0] counter;  // Adjusted counter size to match 1kHz output
     reg slow_clk;
     assign slow_clk_out = slow_clk;
 
@@ -39,22 +39,19 @@ module debouncing_circuit (
     input  reset,
     output button_out
 );
-    reg ff1, ff2;
+    reg ff1, ff2, ff3;
 
-    assign button_out = ff1 & ~ff2;
+    assign button_out = ff2 & ~ff3;
 
-    initial begin
-        ff1 <= 0;
-        ff2 <= 0;
-    end
-
-    always @(posedge slow_clk) begin
+    always @(posedge slow_clk or posedge reset) begin
         if (reset) begin
             ff1 <= 0;
             ff2 <= 0;
+            ff3 <= 0;
         end else begin
             ff1 <= button_in;
             ff2 <= ff1;
+            ff3 <= ff2;
         end
     end
 
@@ -158,7 +155,7 @@ module data_input (
         sign <= 0;
     end
 
-    always @(*) begin
+    always @(posedge slow_clk_signal or posedge reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
             input_data <= 0;
@@ -179,7 +176,7 @@ module data_input (
                 sign <= 0;
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
-                if (unit < 4) begin
+                if (unit < 3) begin
                     unit <= unit + 1;
                 end else begin
                     unit <= 0;
@@ -188,21 +185,21 @@ module data_input (
                 if (unit > 0) begin
                     unit <= unit - 1;
                 end else begin
-                    unit <= 4;
+                    unit <= 3;
                 end
             end else if (deb_U_out) begin
                 // Increment of input_data
-                if (unit == 0 && ones <= 9) begin
+                if (unit == 0 && ones < 9) begin
                     if (input_data < 999) begin
                         input_data <= input_data + 1;
                         ones <= ones + 1;
                     end
-                end else if (unit == 1 && tens <= 9) begin
+                end else if (unit == 1 && tens < 9) begin
                     if (input_data <= 989) begin
                         input_data <= input_data + 10;
                         tens <= tens + 1;
                     end
-                end else if (unit == 2 && hundreds <= 9) begin
+                end else if (unit == 2 && hundreds < 9) begin
                     if (input_data <= 899) begin
                         input_data <= input_data + 100;
                         hundreds   <= hundreds + 1;
