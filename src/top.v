@@ -9,13 +9,15 @@ module top (
     input        btnD,       // down
     input        btnC,       // center
     output [0:6] seg,        // 7 segment display segment pattern
-    output [3:0] digit       // 7 segment display anodes
+    output [3:0] digit,      // 7 segment display anodes
+    output [0:3] an          // 4 anodes for 7-segment display
 );
 
     // Internal wires for connecting inner modules
     wire w_10Hz;
     wire [3:0] w_1s, w_10s, w_100s, w_1000s;
     wire sign_signal;
+    wire [15:0] input_data_out;
 
     // Instantiate inner design modules
     tenHz_gen hz10 (
@@ -32,12 +34,12 @@ module top (
         .bt_D(btnD),
         .clk(CLK100MHZ),
         .reset(reset),
+        .input_data_out(input_data_out),
         .ones_out(w_1s),
         .tens_out(w_10s),
         .hundreds_out(w_100s),
         .sign_out(sign_signal)
     );
-
 
     seg7_control seg7 (
         .clock(CLK100MHZ),

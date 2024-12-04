@@ -66,20 +66,17 @@ module data_input (
     input clk,
     input reset,
 
-    // output data to be displayed to the 7-segment display
+    // outputs to write to BRAM
+    output [15:0] input_data_out,
+    output input_status_out,
+    // outputs to display the digits
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output sign_out  // sign signal of the inputs
+    output sign_out
 );
 
     wire slow_clk_signal;
-    // debounced values of the buttons
-    reg  deb_C;
-    reg  deb_L;
-    reg  deb_R;
-    reg  deb_U;
-    reg  deb_D;
     // assign wires to registers from the debouncing circuit
     wire deb_C_out;
     wire deb_L_out;
@@ -87,34 +84,21 @@ module data_input (
     wire deb_U_out;
     wire deb_D_out;
 
-    assign deb_C_out = deb_C;
-    assign deb_L_out = deb_L;
-    assign deb_R_out = deb_R;
-    assign deb_U_out = deb_U;
-    assign deb_D_out = deb_D;
-
-    reg [15:0] input_data;  // 16 bit input data
+    reg [15:0] input_data;
     reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
-
     // display outputs
     reg [3:0] ones;
     reg [3:0] tens;
     reg [3:0] hundreds;
     reg sign;  // used to show whether the number is positive or negative
 
+    assign input_data_out = input_data;
+    assign input_status_out = input_status;
     assign ones_out = ones;
     assign tens_out = tens;
     assign hundreds_out = hundreds;
     assign sign_out = sign;
-
-    blk_mem_gen_0 BRAMROM (
-        .clka (clk),
-        .wea  (1'b1),                  // Write enable
-        .addra(input_status ? 1 : 0),  // Address: 0 for A, 1 for B
-        .dina (input_data),            // Data input
-        .ena  (1'b1)                   // Enable the BRAM
-    );
 
     slow_clk slow_clk_inst (
         .clk(clk),
@@ -157,43 +141,56 @@ module data_input (
         .reset(reset),
         .button_out(deb_D_out)
     );
-    // TODO: write code that keeps track of what has been input for ones, tens, hundreds, and thousands so that we can display it later without doing arithmetic
+
     // Handle the data input
-    always @(bt_C or bt_U or bt_L or bt_R or bt_D or reset) begin
+    initial begin
+        deb_C <= 0;
+        deb_U <= 0;
+        deb_L <= 0;
+        deb_R <= 0;
+        deb_D <= 0;
+        input_data <= 0;
+        input_status <= 0;
+        unit <= 0;
+        ones <= 0;
+        tens <= 0;
+        hundreds <= 0;
+        sign <= 0;
+    end
+
+    always @(deb_C_out or deb_U_out or deb_R_out or deb_L_out or deb_D_out or posedge reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
-            // flush debounced button registers
-            deb_C <= 0;
-            deb_U <= 0;
-            deb_L <= 0;
-            deb_R <= 0;
-            deb_D <= 0;
             input_data <= 0;
             input_status <= 0;
             unit <= 0;
-
-            // flush the registers that take count of the digits
             ones <= 0;
             tens <= 0;
             hundreds <= 0;
-            sign <= 0;  // thousands 0-positive, 1-negative
+            sign <= 0;
         end else begin
-            if (bt_C) begin
+            if (deb_C_out) begin
                 input_status <= ~input_status;
-            end else if (bt_L) begin
+                input_data <= 0;
+                unit <= 0;
+                ones <= 0;
+                tens <= 0;
+                hundreds <= 0;
+                sign <= 0;
+            end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin
                     unit <= unit + 1;
                 end else begin
                     unit <= 0;
                 end
-            end else if (bt_R) begin
+            end else if (deb_R_out) begin
                 if (unit > 0) begin
                     unit <= unit - 1;
                 end else begin
                     unit <= 4;
                 end
-            end else if (bt_U) begin
+            end else if (deb_U_out) begin
                 // Increment of input_data
                 if (unit == 0 && ones <= 9) begin
                     if (input_data < 999) begin
@@ -214,7 +211,7 @@ module data_input (
                     sign <= ~sign;
                     input_data <= -input_data;
                 end
-            end else if (bt_D) begin
+            end else if (deb_D_out) begin
                 // Decrement of input_data
                 if (unit == 0 && ones > 0) begin
                     if (input_data > -999) begin
@@ -238,4 +235,3 @@ module data_input (
             end
         end
     end
-endmodule
