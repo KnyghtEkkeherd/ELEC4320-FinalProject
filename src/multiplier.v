@@ -44,23 +44,26 @@ module signed_multiplier (
                 if (abs_B[count]) begin
                     product = product + (abs_A << count);
                 end
-                count <= count + 1;
+                count <= count + 1; // Increment count
             end else begin
                 // Adjust the sign of the product
                 if (A_sign ^ B_sign) begin
-                    product = -product;
+                    product = -product; // Negate product if signs are different
                 end
-                C <= product;
-                ready <= 1'b1;
+                C <= product; // Assign the final product
+                ready <= 1'b1; // Assert ready when done
             end
         end
     end
 endmodule
 
-// Testbench:
+// === TESTBENCH ===
 
 // `timescale 1ns / 1ps
-// module signed_multiplier_tb;
+
+// module tb_signed_multiplier;
+
+//     // Parameters
 //     reg signed [15:0] A;
 //     reg signed [15:0] B;
 //     reg clk;
@@ -68,7 +71,7 @@ endmodule
 //     reg reset;
 //     wire signed [31:0] C;
 //     wire ready;
-    
+
 //     // Instantiate the signed_multiplier module
 //     signed_multiplier uut (
 //         .A(A),
@@ -79,44 +82,67 @@ endmodule
 //         .C(C),
 //         .ready(ready)
 //     );
-    
-//     // Generate clock signal
-//     always #5 clk = ~clk;
-    
+
+//     // Clock generation
+//     always begin
+//         #5 clk = ~clk; // 100MHz clock
+//     end
+
+//     // Initial block for stimulus
 //     initial begin
-//         // Initialize inputs
-//         A = 16'd1000;
-//         B = -16'd20;
+//         // Initialize signals
 //         clk = 0;
 //         clear = 0;
 //         reset = 1;
+//         A = 0;
+//         B = 0;
         
-//         // Apply reset
+//         // Release reset
 //         #10 reset = 0;
-//         clear = 1;
-//         #10 clear = 0;
         
-//         // Wait for the ready signal
-//         wait(ready);
+//         // Test case 1: A = 3, B = 4
+//         A = 16'sd3;
+//         B = 16'sd4;
+//         clear = 1; // Clear the multiplier
+//         #10 clear = 0; // Release clear
+//         wait(ready); // Wait until ready is asserted
         
-//         // Display the result
-//         $display("A = %d, B = %d, C = %d", A, B, C);
+//         // Check results for Test case 1
+//         if (C !== 12) $display("Test case 1 failed: C = %d (expected 12)", C);
+//         else $display("Test case 1 passed: C = %d", C);
         
-//         // Test another value
-//         reset = 1;
-//         #10 reset = 0;
-//         clear = 1;
-//         A = -16'd123;
-//         B = 16'd456;
-//         #10 clear = 0;
+//         // Clear for the next test
+//         clear = 1; 
+//         #10 clear = 0; // Release clear
+
+//         // Test case 2: A = -5, B = 6
+//         A = -16'sd5;
+//         B = 16'sd6;
+//         clear = 1; // Clear the multiplier
+//         #10 clear = 0; // Release clear
+//         wait(ready); // Wait until ready is asserted
         
-//         // Wait for the ready signal
-//         wait(ready);
+//         // Check results for Test case 2
+//         if (C !== -30) $display("Test case 2 failed: C = %d (expected -30)", C);
+//         else $display("Test case 2 passed: C = %d", C);
         
-//         // Display the result
-//         $display("A = %d, B = %d, C = %d", A, B, C);
+//         // Clear for the next test
+//         clear = 1; 
+//         #10 clear = 0; // Release clear
+
+//         // Test case 3: A = 0, B = 7
+//         A = 16'sd0;
+//         B = 16'sd7;
+//         clear = 1; // Clear the multiplier
+//         #10 clear = 0; // Release clear
+//         wait(ready); // Wait until ready is asserted
         
-//         // Finish simulation
-//         #10 $finish;
+//         // Check results for Test case 3
+//         if (C !== 0) $display("Test case 3 failed: C = %d (expected 0)", C);
+//         else $display("Test case 3 passed: C = %d", C);
+
+//         // End simulation
+//         $finish;
 //     end
+
 // endmodule
