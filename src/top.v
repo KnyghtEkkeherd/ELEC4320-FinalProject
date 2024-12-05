@@ -16,7 +16,7 @@ module top (
     // Internal wires for connecting inner modules
     wire w_10Hz;
     wire [3:0] w_1s, w_10s, w_100s, w_1000s;
-    wire sign_signal;
+    wire [ 3:0] sign_signal;
     wire [15:0] input_data_out;
 
     // Instantiate inner design modules
