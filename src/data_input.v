@@ -12,7 +12,7 @@ module slow_clk (
     output slow_clk_out
 );
     // input 100MHz clock
-    // output 1kHz clock
+    // output 1kHz clock -- change after testing on the real board
 
     reg [16:0] counter;  // Adjusted counter size to match 1kHz output
     reg slow_clk;
@@ -176,7 +176,7 @@ module data_input (
                 sign <= 0;
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
-                if (unit < 3) begin
+                if (unit < 4) begin
                     unit <= unit + 1;
                 end else begin
                     unit <= 0;
