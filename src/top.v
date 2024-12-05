@@ -15,9 +15,9 @@ module top (
 
     // Internal wires for connecting inner modules
     wire w_10Hz;
-    wire [3:0] w_1s, w_10s, w_100s, w_1000s;
-    wire [ 3:0] sign_signal;
+    wire [3:0] w_1s, w_10s, w_100s, w_1000s, sign_signal;
     wire [15:0] input_data_out;
+    wire operand_selection;  // specifies whether A or B has been input: A-0, B-1
 
     // Instantiate inner design modules
     tenHz_gen hz10 (
@@ -38,7 +38,8 @@ module top (
         .ones_out(w_1s),
         .tens_out(w_10s),
         .hundreds_out(w_100s),
-        .sign_out(sign_signal)
+        .sign_out(sign_signal),
+        .operand_selection_out(operand_selection)
     );
 
     seg7_control seg7 (

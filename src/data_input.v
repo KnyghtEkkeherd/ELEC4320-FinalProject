@@ -70,12 +70,12 @@ module data_input (
 
     // outputs to write to BRAM
     output [15:0] input_data_out,
-    output input_status_out,
     // outputs to display the digits
     output [3:0] ones_out,
     output [3:0] tens_out,
     output [3:0] hundreds_out,
-    output [3:0] sign_out
+    output [3:0] sign_out,
+    output operand_selection_out  // specifies whether A or B has been input: A-0, B-1
 );
 
     wire slow_clk_signal;
@@ -87,20 +87,20 @@ module data_input (
     wire deb_D_out;
 
     reg [15:0] input_data;
-    reg input_status;  // 0-A, 1-B
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones
     // display outputs
     reg [3:0] ones;
     reg [3:0] tens;
     reg [3:0] hundreds;
     reg [3:0] sign;  // used to show whether the number is positive or negative
+    reg operand_selection;
 
     assign input_data_out = input_data;
-    assign input_status_out = input_status;
     assign ones_out = ones;
     assign tens_out = tens;
     assign hundreds_out = hundreds;
     assign sign_out = sign;
+    assign operand_selection_out = operand_selection;
 
     slow_clk slow_clk_inst (
         .clk(clk),
@@ -147,33 +147,33 @@ module data_input (
     // Handle the data input
     initial begin
         input_data <= 0;
-        input_status <= 0;
         unit <= 0;
         ones <= 0;
         tens <= 0;
         hundreds <= 0;
         sign <= 0;
+        operand_selection <= 0;  // operand A is the first one after reset or init
     end
 
     always @(posedge slow_clk_signal or posedge reset) begin
         // Handle the displaying and storing of the input data
         if (reset) begin
             input_data <= 0;
-            input_status <= 0;
             unit <= 0;
             ones <= 0;
             tens <= 0;
             hundreds <= 0;
             sign <= 0;
+            operand_selection <= 0;
         end else begin
             if (deb_C_out) begin
-                input_status <= ~input_status;
                 input_data <= 0;
                 unit <= 0;
                 ones <= 0;
                 tens <= 0;
                 hundreds <= 0;
                 sign <= 0;
+                operand_selection <= ~operand_selection;
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin
