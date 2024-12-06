@@ -19,6 +19,10 @@ module top (
     wire [15:0] input_data_out;
     wire        operand_selection;  // specifies whether A or B has been input: A-0, B-1
     wire        reset = sw[0];  // Assign sw[0] to reset
+    wire        advance_display = sw[1];  // show the next 4 digits
+    wire [31:0] result;
+    wire        result_ready;
+    wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
 
     // Instantiate inner design modules
 
@@ -38,12 +42,22 @@ module top (
         .operand_selection_out(operand_selection)
     );
 
+    arithmetic_unit arith_unit (
+        .input_data(input_data_out),
+        .operand_selection(operand_selection),
+        .operation(operation),
+        .CLK100MHz(CLK100MHZ),
+        .reset(reset),
+        .result_out(result),
+        .result_ready(result_ready)
+    );
+
     display_top disp_top (
         .CLK100MHz(CLK100MHZ),
         .reset(reset),
-        .select(1'b0),  // just display the input for now
-        .advance_display(sw[1]),  // advance the display to the next 4 digits
-        .result_in(32'h00001111),  // no result to display for now
+        .select(result_ready),  // if result is ready, display it. If not, display the current input
+        .advance_display(advance_display),  // advance the display to the next 4 digits
+        .result_in(result),  // no result to display for now
         .data_in_ones(data_in_ones),
         .data_in_tens(data_in_tens),
         .data_in_hundreds(data_in_hundreds),
