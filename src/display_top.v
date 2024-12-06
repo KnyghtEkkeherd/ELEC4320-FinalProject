@@ -45,7 +45,7 @@ module display_top (
         thousands <= 4'b0000;
     end
 
-    always @(CLK10Hz or reset or select or advance_display or result_in or data_in_ones or data_in_tens or data_in_hundreds or data_in_thousands) begin
+    always @(*) begin
         if (reset) begin
             LEDs <= 2'b00;
             ones <= 4'b0000;
