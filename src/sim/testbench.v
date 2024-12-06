@@ -9,7 +9,7 @@ module tb_top;
     reg btnR;
     reg btnD;
     reg btnC;
-    reg reset;
+    reg [0:15] sw;
     wire [0:6] seg;
     wire [3:0] an;
 
@@ -21,7 +21,7 @@ module tb_top;
         .btnR(btnR),
         .btnD(btnD),
         .btnC(btnC),
-        .reset(reset),
+        .sw(sw),
         .seg(seg),
         .an(an)
     );
@@ -40,13 +40,13 @@ module tb_top;
         btnR  = 0;
         btnD  = 0;
         btnC  = 0;
-        reset = 1;
+        sw[0] = 1;  // reset
 
         // Wait for some time
         #10;
 
         // Release reset
-        reset = 0;
+        sw[0] = 0;  // reset
         #10;
 
         // test ones

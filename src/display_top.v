@@ -48,12 +48,12 @@ module display_top (
         LEDs <= 2'b00;
     end
 
-    always @(posedge clk10Hz or posedge reset) begin
+    always @(posedge CLK10Hz or posedge reset) begin
         if (reset) begin
             LEDs <= 2'b00;
         end else if (select) begin
             // display the result from the arithmetic module
-            if (dadvance_display) begin
+            if (advance_display) begin
                 // display the last 4 digits
                 ones <= (result_in[19:16] <= 9) ? result_in[19:16] : 4'b0000;
                 tens <= (result_in[23:20] <= 9) ? result_in[23:20] : 4'b0000;

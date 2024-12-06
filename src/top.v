@@ -1,18 +1,17 @@
 `timescale 1ns / 1ps
 
 module top (
-    input        CLK100MHZ,  // from Basys 3
+    input         CLK100MHZ,  // from Basys 3
     //input        reset,      // btnC
-    input        btnU,       // up
-    input        btnL,       // left
-    input        btnR,       // right
-    input        btnD,       // down
-    input        btnC,       // center
-    input        reset,      // DIP switch 0
-    input        sw,         // DIP switch inputs 1-15
-    output [0:6] seg,        // 7 segment display segment pattern
-    output [3:0] an,         // 7 segment display anodes
-    output [1:0] LED         // LEDs to specify the current display mode
+    input         btnU,       // up
+    input         btnL,       // left
+    input         btnR,       // right
+    input         btnD,       // down
+    input         btnC,       // center
+    input  [0:15] sw,         // DIP switch inputs 0-15: reset: 0
+    output [ 0:6] seg,        // 7 segment display segment pattern
+    output [ 3:0] an,         // 7 segment display anodes
+    output [ 1:0] LED         // LEDs to specify the current display mode
 );
 
     // Internal wires for connecting inner modules
@@ -30,7 +29,7 @@ module top (
         .bt_R(btnR),
         .bt_D(btnD),
         .clk(CLK100MHZ),
-        .reset(reset),
+        .reset(sw[0]),
         .input_data_out(input_data_out),
         .ones_out(data_in_ones),
         .tens_out(data_in_tens),
@@ -39,9 +38,9 @@ module top (
         .operand_selection_out(operand_selection)
     );
 
-    display_top(
+    display_top disp_top (
         .CLK100MHz(CLK100MHZ),
-        .reset(reset),
+        .reset(sw[0]),
         .select(1'b0),  // just display the input for now
         .advance_display(sw[1]),  // advance the display to the next 4 digits
         .result_in(32'b0),  // no result to display for now
