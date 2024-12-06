@@ -9,7 +9,7 @@ module tb_top;
     reg btnR;
     reg btnD;
     reg btnC;
-    reg [0:15] sw;
+    reg [15:0] sw;
     wire [0:6] seg;
     wire [3:0] an;
 
@@ -35,12 +35,13 @@ module tb_top;
     // Stimulus process
     initial begin
         // Initialize inputs
-        btnU  = 0;
-        btnL  = 0;
-        btnR  = 0;
-        btnD  = 0;
-        btnC  = 0;
-        sw[0] = 1;  // reset
+        btnU = 0;
+        btnL = 0;
+        btnR = 0;
+        btnD = 0;
+        btnC = 0;
+        sw = 0;  // set all switches to 0 for testing
+        sw[0] = 1;  // reset the reset switch to high
 
         // Wait for some time
         #10;
@@ -241,6 +242,9 @@ module tb_top;
         btnD = 1;
         #1_000_000;
         btnD = 0;
+
+        #1_000_000;
+        sw[1] = 1;  // advance the display of the input
         #1_000_000_000;
 
         // Finish simulation

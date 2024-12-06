@@ -46,26 +46,34 @@ module display_top (
 
     initial begin
         LEDs <= 2'b00;
+        ones <= 4'b0000;
+        tens <= 4'b0000;
+        hundreds <= 4'b0000;
+        thousands <= 4'b0000;
     end
 
-    always @(posedge CLK10Hz or posedge reset) begin
+    always @(CLK10Hz or reset or select or advance_display or result_in or data_in_ones or data_in_tens or data_in_hundreds or data_in_thousands) begin
         if (reset) begin
             LEDs <= 2'b00;
+            ones <= 4'b0000;
+            tens <= 4'b0000;
+            hundreds <= 4'b0000;
+            thousands <= 4'b0000;
         end else if (select) begin
             // display the result from the arithmetic module
             if (advance_display) begin
                 // display the last 4 digits
-                ones <= (result_in[19:16] <= 9) ? result_in[19:16] : 4'b0000;
-                tens <= (result_in[23:20] <= 9) ? result_in[23:20] : 4'b0000;
-                hundreds <= (result_in[27:24] <= 9) ? result_in[27:24] : 4'b0000;
-                thousands <= (result_in[31:28] <= 9) ? result_in[31:28] : 4'b0000;
+                ones <= 4'b0010;
+                tens <= 4'b0010;
+                hundreds <= 4'b0010;
+                thousands <= 4'b0010;
                 LEDs <= 2'b01;
             end else begin
                 // display the first 4 digits
-                ones <= (result_in[3:0] <= 9) ? result_in[3:0] : 4'b0000;
-                tens <= (result_in[7:4] <= 9) ? result_in[7:4] : 4'b0000;
-                hundreds <= (result_in[11:8] <= 9) ? result_in[11:8] : 4'b0000;
-                thousands <= (result_in[15:12] <= 9) ? result_in[15:12] : 4'b0000;
+                ones <= 4'b0001;
+                tens <= 4'b0001;
+                hundreds <= 4'b0001;
+                thousands <= 4'b0001;
                 LEDs <= 2'b00;
             end
 
