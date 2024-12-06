@@ -93,7 +93,7 @@ module data_input (
     reg [3:0] tens;
     reg [3:0] hundreds;
     reg [3:0] sign;  // used to show whether the number is positive or negative
-    reg operand_selection;
+    reg [1:0] operand_selection;
 
     assign input_data_out = input_data;
     assign ones_out = ones;
