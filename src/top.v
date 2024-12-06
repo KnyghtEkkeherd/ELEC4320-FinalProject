@@ -49,7 +49,7 @@ module top (
         .CLK100MHz(CLK100MHZ),
         .reset(reset),
         .result_out(result),
-        .result_ready(result_ready)
+        .result_ready_out(result_ready)
     );
 
     display_top disp_top (

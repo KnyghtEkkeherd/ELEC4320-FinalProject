@@ -98,11 +98,6 @@ module top_tb;
         sw[15:5] = 11'b10000000000;
         #1_000_000;
 
-        sw[1] = 1;  // Advance display
-        #1_000_000;
-        sw[1] = 0;
-        #1_000_000;
-
         // Continue adding more stimulus as needed
     end
 

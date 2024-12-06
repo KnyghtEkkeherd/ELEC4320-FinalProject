@@ -13,15 +13,18 @@ module arithmetic_unit (
     input reset,
 
     output [31:0] result_out,
-    output result_ready
+    output result_ready_out
 );
 
     reg [15:0] operand_A, operand_B;
     reg [31:0] result;
+    reg result_ready;
 
     assign result_out = result;
+    assign result_ready_out = result_ready;
 
-    always @(posedge CLK100MHz or posedge reset) begin
+    // only calculate the result when the input changes
+    always @(input_data or reset) begin
         if (reset) begin
             operand_A <= 16'b0;
             operand_B <= 16'b0;
@@ -34,19 +37,24 @@ module arithmetic_unit (
                 operand_B <= input_data;
             end
         end
-        case (operation)
-            11'b00000000000: begin
-                result <= operand_A + operand_B;
-                result_ready <= 1;
-            end
-            11'b00000000001: begin
-                result <= operand_A - operand_B;
-                result_ready <= 1;
-            end
-            default: begin
-                result <= 32'b0;
-                result_ready <= 0;
-            end
-        endcase
+        if (result_ready == 0) begin
+            case (operation)  // operation switch has to be chosen after the inputs
+                11'b10000000000: begin
+                    result <= operand_A + operand_B;
+                    operand_A <= operand_A;  // refresh operand_A
+                    operand_B <= operand_B;  // refresh operand_B
+                    result_ready <= 1;
+                end
+                11'b01000000000: begin
+                    result <= operand_A - operand_B;
+                    operand_A <= operand_A;  // refresh operand_A
+                    operand_B <= operand_B;  // refresh operand_B
+                    result_ready <= 1;
+                end
+                default: begin
+                    result <= 32'b0;
+                end
+            endcase
+        end
     end
 endmodule
