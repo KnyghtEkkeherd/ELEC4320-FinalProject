@@ -23,6 +23,7 @@ module top (
     wire [31:0] result;
     wire        result_ready;
     wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
+    wire        deb_C_out;
 
     // Instantiate inner design modules
 
@@ -39,7 +40,8 @@ module top (
         .tens_out(data_in_tens),
         .hundreds_out(data_in_hundreds),
         .sign_out(data_in_sign),
-        .operand_selection_out(operand_selection)
+        .operand_selection_out(operand_selection),
+        .deb_C_out(deb_C_out)
     );
 
     arithmetic_unit arith_unit (
@@ -49,7 +51,8 @@ module top (
         .CLK100MHz(CLK100MHZ),
         .reset(reset),
         .result_out(result),
-        .result_ready_out(result_ready)
+        .result_ready_out(result_ready),
+        .deb_C(deb_C_out)
     );
 
     display_top disp_top (

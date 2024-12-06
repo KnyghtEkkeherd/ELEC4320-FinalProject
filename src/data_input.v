@@ -71,11 +71,12 @@ module data_input (
     // outputs to write to BRAM
     output [15:0] input_data_out,
     // outputs to display the digits
-    output [ 3:0] ones_out,
-    output [ 3:0] tens_out,
-    output [ 3:0] hundreds_out,
-    output [ 3:0] sign_out,
-    output [ 1:0] operand_selection_out  // specifies whether A or B has been input: A-0, B-1
+    output [3:0] ones_out,
+    output [3:0] tens_out,
+    output [3:0] hundreds_out,
+    output [3:0] sign_out,
+    output [1:0] operand_selection_out,  // specifies whether A or B has been input: A-0, B-1
+    output deb_C_out  // output the center button if it's pressed again to clear the result
 );
 
     wire slow_clk_signal;
