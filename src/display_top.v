@@ -19,7 +19,6 @@ module display_top (
     reg [3:0] ones, tens, hundreds, thousands;
     reg [1:0] LEDs;
     wire [3:0] w_1s, w_10s, w_100s, w_1000s;
-    wire CLK10Hz;
 
     assign w_1s = ones;
     assign w_10s = tens;
@@ -27,14 +26,8 @@ module display_top (
     assign w_1000s = thousands;
     assign LEDs_out = LEDs;
 
-    tenHz_gen hz10 (
-        .clk_100MHz(CLK100MHZ),
-        .reset(reset),
-        .clk_10Hz(CLK10Hz)
-    );
-
     seg7_control seg7 (
-        .clock(CLK10Hz),
+        .clock(CLK100MHz),
         .reset(reset),
         .ones(w_1s),
         .tens(w_10s),

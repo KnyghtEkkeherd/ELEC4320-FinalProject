@@ -71,11 +71,11 @@ module data_input (
     // outputs to write to BRAM
     output [15:0] input_data_out,
     // outputs to display the digits
-    output [3:0] ones_out,
-    output [3:0] tens_out,
-    output [3:0] hundreds_out,
-    output [3:0] sign_out,
-    output operand_selection_out  // specifies whether A or B has been input: A-0, B-1
+    output [ 3:0] ones_out,
+    output [ 3:0] tens_out,
+    output [ 3:0] hundreds_out,
+    output [ 3:0] sign_out,
+    output [ 1:0] operand_selection_out  // specifies whether A or B has been input: A-0, B-1
 );
 
     wire slow_clk_signal;
@@ -173,7 +173,11 @@ module data_input (
                 tens <= 0;
                 hundreds <= 0;
                 sign <= 0;
-                operand_selection <= ~operand_selection;
+
+                // confirm inputs A and B
+                if (operand_selection == 0) operand_selection <= 1;  // A ready, now input B
+                else if (operand_selection == 1) operand_selection <= 2;  // B ready, now compute
+                else if (operand_selection == 2) operand_selection <= 0;  // go back
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin

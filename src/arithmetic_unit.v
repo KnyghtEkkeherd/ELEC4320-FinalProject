@@ -7,7 +7,7 @@
 
 module arithmetic_unit (
     input [15:0] input_data,
-    input operand_selection,
+    input [1:0] operand_selection,
     input [10:0] operation,  // 11 switches, each for one operation
     input CLK100MHz,
     input reset,
@@ -35,26 +35,27 @@ module arithmetic_unit (
                 operand_A <= input_data;
             end else if (operand_selection == 1) begin
                 operand_B <= input_data;
+            end else if (operand_selection == 2) begin
+                if (result_ready == 0) begin
+                    case (operation)  // operation switch has to be chosen after the inputs
+                        11'b10000000000: begin
+                            result <= operand_A + operand_B;
+                            operand_A <= operand_A;  // refresh operand_A
+                            operand_B <= operand_B;  // refresh operand_B
+                            result_ready <= 1;
+                        end
+                        11'b01000000000: begin
+                            result <= operand_A - operand_B;
+                            operand_A <= operand_A;  // refresh operand_A
+                            operand_B <= operand_B;  // refresh operand_B
+                            result_ready <= 1;
+                        end
+                        default: begin
+                            result <= 32'b0;
+                        end
+                    endcase
+                end
             end
-        end
-        if (result_ready == 0) begin
-            case (operation)  // operation switch has to be chosen after the inputs
-                11'b10000000000: begin
-                    result <= operand_A + operand_B;
-                    operand_A <= operand_A;  // refresh operand_A
-                    operand_B <= operand_B;  // refresh operand_B
-                    result_ready <= 1;
-                end
-                11'b01000000000: begin
-                    result <= operand_A - operand_B;
-                    operand_A <= operand_A;  // refresh operand_A
-                    operand_B <= operand_B;  // refresh operand_B
-                    result_ready <= 1;
-                end
-                default: begin
-                    result <= 32'b0;
-                end
-            endcase
         end
     end
 endmodule

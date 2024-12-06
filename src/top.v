@@ -17,7 +17,7 @@ module top (
     wire w_10Hz;
     wire [3:0] data_in_ones, data_in_tens, data_in_hundreds, data_in_sign;
     wire [15:0] input_data_out;
-    wire        operand_selection;  // specifies whether A or B has been input: A-0, B-1
+    wire [ 1:0] operand_selection;  // 0:A is being input, 1:B is being input, 2:ready to compute
     wire        reset = sw[0];  // Assign sw[0] to reset
     wire        advance_display = sw[1];  // show the next 4 digits
     wire [31:0] result;
