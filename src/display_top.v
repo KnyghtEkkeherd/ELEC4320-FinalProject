@@ -56,17 +56,17 @@ module display_top (
             // display the result from the arithmetic module
             if (advance_display) begin
                 // display the last 4 digits
-                ones <= 4'b0010;
-                tens <= 4'b0010;
-                hundreds <= 4'b0010;
-                thousands <= 4'b0010;
+                ones <= result_in[19:16];
+                tens <= result_in[23:20];
+                hundreds <= result_in[27:24];
+                thousands <= result_in[31:28];
                 LEDs <= 2'b01;
             end else begin
                 // display the first 4 digits
-                ones <= 4'b0001;
-                tens <= 4'b0001;
-                hundreds <= 4'b0001;
-                thousands <= 4'b0001;
+                ones <= result_in[3:0];
+                tens <= result_in[7:4];
+                hundreds <= result_in[11:8];
+                thousands <= result_in[15:12];
                 LEDs <= 2'b00;
             end
 
