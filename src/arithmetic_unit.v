@@ -53,6 +53,8 @@ module arithmetic_unit (
                         end
                         default: begin
                             result <= 32'b0;
+                            operand_A <= operand_A;  // refresh operand_A
+                            operand_B <= operand_B;  // refresh operand_B
                         end
                     endcase
                 end
