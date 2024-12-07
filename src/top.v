@@ -40,7 +40,7 @@ module top (
         .tens_out(data_in_tens),
         .hundreds_out(data_in_hundreds),
         .sign_out(data_in_sign),
-        .operand_selection_out(operand_selection),
+        .operand_selection(operand_selection),
         .deb_C_out(deb_C_out)
     );
 

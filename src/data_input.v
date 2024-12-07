@@ -75,7 +75,7 @@ module data_input (
     output [3:0] tens_out,
     output [3:0] hundreds_out,
     output [3:0] sign_out,
-    output [1:0] operand_selection_out,  // specifies whether A or B has been input: A-0, B-1
+    output reg [1:0] operand_selection,  // specifies whether A or B has been input: A-0, B-1
     output deb_C_out  // output the center button if it's pressed again to clear the result
 );
 
@@ -101,7 +101,6 @@ module data_input (
     assign tens_out = tens;
     assign hundreds_out = hundreds;
     assign sign_out = sign;
-    assign operand_selection_out = operand_selection;
 
     slow_clk slow_clk_inst (
         .clk(clk),

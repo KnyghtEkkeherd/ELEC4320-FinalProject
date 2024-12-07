@@ -26,7 +26,7 @@ module arithmetic_unit (
 
     // only calculate the result when the input changes
     always @(input_data or reset) begin
-        if (reset || deb_C) begin
+        if (reset) begin
             operand_A <= 16'b0;
             operand_B <= 16'b0;
             result <= 32'b0;
