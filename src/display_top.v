@@ -48,6 +48,7 @@ module display_top (
     );
 
     always @(posedge deb_U or posedge deb_D) begin
+        conversion_done <= 0;  // Reset conversion done flag when changing display mode
         if (deb_U && (display_mode < 3)) display_mode <= display_mode + 1;
         else if (deb_D && (display_mode > 0)) display_mode <= display_mode - 1;
     end
