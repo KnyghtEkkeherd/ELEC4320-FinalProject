@@ -18,10 +18,22 @@ module display_top (
 
     reg [3:0] ones, tens, hundreds, thousands;
     reg [1:0] LEDs;
-    wire [15:0] bcd_result;
+    wire [15:0] bcd_result;  // Adjusted to match the 40-bit BCD output
     wire conversion_ready;
+    reg conversion_done;  // Flag to indicate if conversion has been done
+
+    wire [11:0] selected_result = result_in[11:0];
 
     assign LEDs_out = LEDs;
+
+    // Instance of the BCD conversion module
+    bcd bcd_conversion (
+        .CLK100MHz(CLK100MHz),
+        .en(select),  // Enable conversion only when there
+        .bin_d_in(selected_result),
+        .bcd_d_out(bcd_result),
+        .conversion_ready(conversion_ready)
+    );
 
     // Instance of the 7-segment display control module
     seg7_control seg7 (
@@ -35,45 +47,38 @@ module display_top (
         .anode_activation(an_out)
     );
 
-    binary_to_decimal bcd (
-        .CLK100MHz(CLK100MHz),
-        .reset(reset),
-        .en(select),  // enable the module only when the result is ready
-        .binary_in(result_in),
-        .thousands(bcd_result[15:12]),
-        .hundreds(bcd_result[11:8]),
-        .tens(bcd_result[7:4]),
-        .ones(bcd_result[3:0]),
-        .conversion_ready(conversion_ready)
-    );
-
     always @(posedge CLK100MHz or posedge reset) begin
         if (reset) begin
-            // Reset all display values
+            // Reset all display values and conversion flag
             LEDs <= 2'b00;
             ones <= 4'b0000;
             tens <= 4'b0000;
             hundreds <= 4'b0000;
             thousands <= 4'b0000;
+            conversion_done <= 0;  // Reset conversion done flag
         end else begin
-            if (select && conversion_ready) begin
-                // Display the result from the arithmetic module
-                if (advance_display) begin
-                    // Display the last 4 digits
-                    ones <= bcd_result[19:16];
-                    tens <= bcd_result[23:20];
-                    hundreds <= bcd_result[27:24];
-                    thousands <= bcd_result[31:28];
-                    LEDs <= 2'b01;
-                end else begin
-                    // Display the first 4 digits
-                    ones <= bcd_result[3:0];
-                    tens <= bcd_result[7:4];
-                    hundreds <= bcd_result[11:8];
-                    thousands <= bcd_result[15:12];
-                    LEDs <= 2'b00;
+            if (conversion_ready) begin
+                // Mark conversion as done
+                conversion_done <= 1;
+
+                if (select) begin
+                    // Display the result from the BCD conversion
+                    if (advance_display) begin
+                        // Display the last 4 digits (most significant)
+                        LEDs <= 2'b01;
+                    end else begin
+                        // Display the first 4 digits (least significant)
+                        ones <= bcd_result[3:0];
+                        tens <= bcd_result[7:4];
+                        hundreds <= bcd_result[11:8];
+                        thousands <= 0;
+                        LEDs <= 2'b00;
+                    end
                 end
-            end else begin
+            end else if (!select) begin
+                // Reset conversion flag when not in select mode
+                conversion_done <= 0;
+
                 // Display the input
                 ones <= data_in_ones;
                 tens <= data_in_tens;
