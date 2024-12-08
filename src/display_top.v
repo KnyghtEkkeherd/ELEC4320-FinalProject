@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
-
+// TODO:
+// handle the display of negative numbers
+// handle the display of numbers larger than 9999 -> enable switches to change the display mode -> fix it
+// handle the display of decimal values
 module display_top (
     input CLK100MHz,
     input reset,
@@ -47,13 +50,11 @@ module display_top (
         .anode_activation(an_out)
     );
 
-    always @(posedge deb_U or posedge deb_D) begin
-        conversion_done <= 0;  // Reset conversion done flag when changing display mode
+    always @(posedge CLK100MHz or posedge reset) begin
+
         if (deb_U && (display_mode < 3)) display_mode <= display_mode + 1;
         else if (deb_D && (display_mode > 0)) display_mode <= display_mode - 1;
-    end
 
-    always @(posedge CLK100MHz or posedge reset) begin
         if (reset) begin
             // Reset all display values and conversion flag
             display_mode <= 2'b00;
