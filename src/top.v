@@ -13,7 +13,7 @@ module top (
     output [ 1:0] LED         // LEDs to specify the current display mode
 );
 
-    // Internal wires for connecting inner modules
+    // Internal wires
     wire w_10Hz;
     wire [3:0] data_in_ones, data_in_tens, data_in_hundreds, data_in_sign;
     wire [15:0] input_data_out;
@@ -23,7 +23,7 @@ module top (
     wire [31:0] result;
     wire        result_ready;
     wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
-    wire        deb_C_out;
+    wire deb_C_out, deb_U_out, deb_D_out;
 
     // Instantiate inner design modules
 
@@ -41,7 +41,9 @@ module top (
         .hundreds_out(data_in_hundreds),
         .sign_out(data_in_sign),
         .operand_selection(operand_selection),
-        .deb_C_out(deb_C_out)
+        .deb_C_out(deb_C_out),
+        .deb_U_out(deb_U_out),
+        .deb_D_out(deb_D_out)
     );
 
     arithmetic_unit arith_unit (
@@ -65,6 +67,8 @@ module top (
         .data_in_tens(data_in_tens),
         .data_in_hundreds(data_in_hundreds),
         .data_in_thousands(data_in_sign),
+        .deb_U(deb_U_out),  // buttons used for advancing the display
+        .deb_D(deb_D_out),
         .an_out(an),
         .seg_out(seg),
         .LEDs_out(LED)

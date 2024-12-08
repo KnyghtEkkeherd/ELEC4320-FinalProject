@@ -47,8 +47,12 @@ module arithmetic_unit (
                                 result_ready <= 1;
                             end
                             11'b01000000000: begin
-                                result <= operand_A - operand_B;
-                                result_ready <= 1;
+                                result = operand_A - operand_B;
+                                result_ready = 1;
+                            end
+                            11'b00100000000: begin
+                                result = 12345;
+                                result_ready = 1;
                             end
                             default: begin
                                 result <= 32'b0;  // Default case

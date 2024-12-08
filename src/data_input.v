@@ -76,7 +76,9 @@ module data_input (
     output [3:0] hundreds_out,
     output [3:0] sign_out,
     output reg [1:0] operand_selection,  // specifies whether A or B has been input: A-0, B-1
-    output deb_C_out  // output the center button if it's pressed again to clear the result
+    output deb_C_out,  // output the center button if it's pressed again to clear the result
+    output deb_U_out,  // output the left button if it's pressed again to clear the result
+    output deb_D_out  // output the right button if it's pressed again to clear the result
 );
 
     wire slow_clk_signal;
