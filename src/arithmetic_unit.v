@@ -25,40 +25,41 @@ module arithmetic_unit (
     assign result_ready_out = result_ready;
 
     // only calculate the result when the input changes
-    always @(input_data or reset) begin
+    always @(posedge CLK100MHz or posedge reset) begin
         if (reset) begin
             operand_A <= 16'b0;
             operand_B <= 16'b0;
             result <= 32'b0;
             result_ready <= 0;
         end else begin
-            if (operand_selection == 0) begin
-                operand_A <= input_data;
-            end else if (operand_selection == 1) begin
-                operand_B <= input_data;
-            end else if (operand_selection == 2) begin
-                if (result_ready == 0) begin
-                    case (operation)  // operation switch has to be chosen after the inputs
-                        11'b10000000000: begin
-                            result <= operand_A + operand_B;
-                            operand_A <= operand_A;  // refresh operand_A
-                            operand_B <= operand_B;  // refresh operand_B
-                            result_ready <= 1;
-                        end
-                        11'b01000000000: begin
-                            result <= operand_A - operand_B;
-                            operand_A <= operand_A;  // refresh operand_A
-                            operand_B <= operand_B;  // refresh operand_B
-                            result_ready <= 1;
-                        end
-                        default: begin
-                            result <= 32'b0;
-                            operand_A <= operand_A;  // refresh operand_A
-                            operand_B <= operand_B;  // refresh operand_B
-                        end
-                    endcase
+            case (operand_selection)
+                2'b00: begin
+                    operand_A <= input_data;  // Update operand_A
                 end
-            end
+                2'b01: begin
+                    operand_B <= input_data;  // Update operand_B
+                end
+                2'b10: begin
+                    if (!result_ready) begin
+                        case (operation)  // operation switch has to be chosen after the inputs
+                            11'b10000000000: begin
+                                result <= operand_A + operand_B;
+                                result_ready <= 1;
+                            end
+                            11'b01000000000: begin
+                                result <= operand_A - operand_B;
+                                result_ready <= 1;
+                            end
+                            default: begin
+                                result <= 32'b0;  // Default case
+                            end
+                        endcase
+                    end
+                end
+                default: begin
+                    // No changes to operands or result
+                end
+            endcase
         end
     end
 endmodule
