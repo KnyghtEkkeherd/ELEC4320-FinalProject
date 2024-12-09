@@ -111,7 +111,10 @@ module control (
                         conversion_en   <= 0;
                     end
                 end else if (conversion_done) begin
-                    if (deb_U && !deb_U_prev) display_mode_out <= display_mode_out + 1;
+                    if (deb_U && !deb_U_prev && display_mode_out < 3)
+                        display_mode_out <= display_mode_out + 1;
+                    if (deb_D && !deb_D_prev && display_mode_out > 0)
+                        display_mode_out <= display_mode_out - 1;
 
                     case (result_type)
                         INT: begin
