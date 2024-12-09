@@ -19,7 +19,9 @@ module display_top (
     input [3:0] data_in_hundreds,
     input [3:0] data_in_thousands,
     input [1:0] display_mode,
+    input conversion_en,
 
+    output reg conversion_ready,
     output [3:0] an_out,
     output [6:0] seg_out,
     output [1:0] LEDs_out  // LEDs to specify the current display mode
@@ -37,7 +39,7 @@ module display_top (
     // Instance of the BCD conversion module
     bcd bcd_conversion (
         .CLK100MHz(CLK100MHz),
-        .en((select == 2'b01) && (conversion_done == 0)),  // Enable conversion only when needed
+        .en(conversion_en),
         .bin_d_in(unsigned_result_in),
         .bcd_d_out(bcd_result),
         .conversion_ready(conversion_ready)
@@ -58,12 +60,10 @@ module display_top (
     always @(posedge CLK100MHz or posedge reset) begin
 
         if (reset) begin
-            // Reset all display values and conversion flag
             ones <= 4'b0000;
             tens <= 4'b0000;
             hundreds <= 4'b0000;
             thousands <= 4'b0000;
-            conversion_done <= 0;  // Reset conversion done flag
             sign <= 0;  // Reset sign flag
             unsigned_result_in <= 32'b0;  // Reset unsigned result
         end else begin
@@ -76,42 +76,36 @@ module display_top (
                 unsigned_result_in <= result_in;
             end
 
-            // Trigger conversion when a new segment is selected
-            if ((select == 2'b01) && !conversion_done) begin
-                if (conversion_ready) begin
-                    conversion_done <= 1;  // Mark conversion as done
-                    case (display_mode)
-                        2'b00: begin
-                            ones <= bcd_result[3:0];
-                            tens <= bcd_result[7:4];
-                            hundreds <= bcd_result[11:8];
-                            thousands <= bcd_result[15:12];
-                        end
-                        2'b01: begin
-                            ones <= bcd_result[19:16];
-                            tens <= bcd_result[23:20];
-                            hundreds <= bcd_result[27:24];
-                            thousands <= bcd_result[31:28];
-                        end
-                        2'b10: begin
-                            ones <= bcd_result[35:32];
-                            tens <= bcd_result[39:36];
-                            hundreds <= 0;
-                            if (sign) thousands <= 4'b1001;  // Display a negative sign at the front
-                            else thousands <= 4'b0000;
-                        end
-                        default: begin
-                            ones <= 4'b0000;
-                            tens <= 4'b0000;
-                            hundreds <= 4'b0000;
-                            thousands <= 4'b0000;
-                        end
-                    endcase
-                end
+            // Display (large) integer values
+            if (select == 2'b01) begin
+                case (display_mode)
+                    2'b00: begin
+                        ones <= bcd_result[3:0];
+                        tens <= bcd_result[7:4];
+                        hundreds <= bcd_result[11:8];
+                        thousands <= bcd_result[15:12];
+                    end
+                    2'b01: begin
+                        ones <= bcd_result[19:16];
+                        tens <= bcd_result[23:20];
+                        hundreds <= bcd_result[27:24];
+                        thousands <= bcd_result[31:28];
+                    end
+                    2'b10: begin
+                        ones <= bcd_result[35:32];
+                        tens <= bcd_result[39:36];
+                        hundreds <= 0;
+                        if (sign) thousands <= 4'b1001;  // Display a negative sign at the front
+                        else thousands <= 4'b0000;
+                    end
+                    default: begin
+                        ones <= 4'b0000;
+                        tens <= 4'b0000;
+                        hundreds <= 4'b0000;
+                        thousands <= 4'b0000;
+                    end
+                endcase
             end else if (select == 2'b00) begin
-                // Reset conversion flag when not in select mode
-                conversion_done <= 0;
-
                 // Display the input data if not in selection mode
                 ones <= data_in_ones;
                 tens <= data_in_tens;

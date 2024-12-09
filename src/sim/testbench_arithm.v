@@ -101,16 +101,6 @@ module top_tb;
         sw[15:5] = 11'b10000000000;
         #1_000_000;
 
-        // test display advancing
-        // btnU = 1;
-        // #1_000_000;
-        // btnU = 0;
-        // #1_000_000;
-        // btnU = 1;
-        // #1_000_000;
-        // btnU = 0;
-        // #1_000_000;
-
         btnC = 1;
         #1_000_000;
         btnC = 0;
@@ -157,9 +147,21 @@ module top_tb;
         btnC = 0;
         #1_000_000;
 
-        // Choose operation: addition: switch[15]
-        sw[15:5] = 11'b10000000000;
+        // Choose operation: big number display
+        sw[15:5] = 11'b00100000000;
+        #10_000_000;
+
+        //test display advancing
+        btnU = 1;
         #1_000_000;
+        btnU = 0;
+        #1_000_000;
+
+        btnU = 1;
+        #1_000_000;
+        btnU = 0;
+
+        #1_000_000_000;
 
         // Continue adding more stimulus as needed
     end

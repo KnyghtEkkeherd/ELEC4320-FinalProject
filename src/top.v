@@ -25,6 +25,7 @@ module top (
     wire deb_C_out, deb_U_out, deb_D_out;
     wire [1:0] select_out;
     wire [1:0] display_mode;
+    wire conversion_en, conversion_ready;
 
     // Instantiate inner design modules
 
@@ -37,9 +38,11 @@ module top (
         .result_ready_in(result_ready),
         .operation_in(operation),
         .operand_selection_in(operand_selection),
+        .conversion_ready(conversion_ready),
         .reset_out(reset),
         .select_out(select_out),
-        .display_mode_out(display_mode)
+        .display_mode_out(display_mode),
+        .conversion_en(conversion_en)
     );
 
     data_input button_input (
@@ -81,6 +84,8 @@ module top (
         .data_in_hundreds(data_in_hundreds),
         .data_in_thousands(data_in_sign),
         .display_mode(display_mode),
+        .conversion_en(conversion_en),
+        .conversion_ready(conversion_ready),
         .an_out(an),
         .seg_out(seg),
         .LEDs_out(LED)
