@@ -11,7 +11,6 @@ module arithmetic_unit (
     input [10:0] operation,  // 11 switches, each for one operation
     input CLK100MHz,
     input reset,
-    input deb_C,  // debounced center button
 
     output [31:0] result_out,
     output result_ready_out
@@ -43,8 +42,8 @@ module arithmetic_unit (
                     if (!result_ready) begin
                         case (operation)  // operation switch has to be chosen after the inputs
                             11'b10000000000: begin
-                                result <= operand_A + operand_B;
-                                result_ready <= 1;
+                                result = operand_A + operand_B;
+                                result_ready = 1;
                             end
                             11'b01000000000: begin
                                 result = operand_A - operand_B;

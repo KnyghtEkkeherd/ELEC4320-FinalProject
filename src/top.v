@@ -18,14 +18,29 @@ module top (
     wire [3:0] data_in_ones, data_in_tens, data_in_hundreds, data_in_sign;
     wire [15:0] input_data_out;
     wire [ 1:0] operand_selection;  // 0:A is being input, 1:B is being input, 2:ready to compute
-    wire        reset = sw[0];  // Assign sw[0] to reset
-    wire        advance_display = sw[1];  // show the next 4 digits
+    wire        reset;
     wire [31:0] result;
     wire        result_ready;
     wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
     wire deb_C_out, deb_U_out, deb_D_out;
+    wire [1:0] select_out;
+    wire [1:0] display_mode;
 
     // Instantiate inner design modules
+
+    control control_inst (
+        .CLK100MHz(CLK100MHZ),
+        .sw(sw),
+        .deb_U(deb_U_out),
+        .deb_C(deb_C_out),
+        .deb_D(deb_D_out),
+        .result_ready_in(result_ready),
+        .operation_in(operation),
+        .operand_selection_in(operand_selection),
+        .reset_out(reset),
+        .select_out(select_out),
+        .display_mode_out(display_mode)
+    );
 
     data_input button_input (
         .bt_C(btnC),
@@ -53,22 +68,19 @@ module top (
         .CLK100MHz(CLK100MHZ),
         .reset(reset),
         .result_out(result),
-        .result_ready_out(result_ready),
-        .deb_C(deb_C_out)
+        .result_ready_out(result_ready)
     );
 
     display_top disp_top (
         .CLK100MHz(CLK100MHZ),
         .reset(reset),
-        .select(result_ready),  // if result is ready, display it. If not, display the current input
-        .advance_display(advance_display),  // advance the display to the next 4 digits
-        .result_in(result),  // no result to display for now
+        .select(select_out),
+        .result_in(result),
         .data_in_ones(data_in_ones),
         .data_in_tens(data_in_tens),
         .data_in_hundreds(data_in_hundreds),
         .data_in_thousands(data_in_sign),
-        .deb_U(deb_U_out),  // buttons used for advancing the display
-        .deb_D(deb_D_out),
+        .display_mode(display_mode),
         .an_out(an),
         .seg_out(seg),
         .LEDs_out(LED)

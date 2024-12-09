@@ -12,15 +12,13 @@
 module display_top (
     input CLK100MHz,
     input reset,
-    input select,  // Select between displaying the input/result
-    input advance_display,  // Advance the display to the next 4 digits
+    input [1:0] select,  // Select between displaying the input/result
     input [31:0] result_in,
     input [3:0] data_in_ones,  // Digits from data input module
     input [3:0] data_in_tens,
     input [3:0] data_in_hundreds,
     input [3:0] data_in_thousands,
-    input deb_U,  // Debounced up button
-    input deb_D,  // Debounced down button
+    input [1:0] display_mode,
 
     output [3:0] an_out,
     output [6:0] seg_out,
@@ -28,7 +26,6 @@ module display_top (
 );
 
     reg [3:0] ones, tens, hundreds, thousands;
-    reg [1:0] display_mode;  // Which 4 digits to display
     wire [39:0] bcd_result;  // Adjusted to match the 16-bit BCD output
     wire conversion_ready;
     reg conversion_done;  // Flag to indicate if conversion has been done
@@ -40,7 +37,7 @@ module display_top (
     // Instance of the BCD conversion module
     bcd bcd_conversion (
         .CLK100MHz(CLK100MHz),
-        .en(select && (conversion_done == 0)),  // Enable conversion only when needed
+        .en((select == 2'b01) && (conversion_done == 0)),  // Enable conversion only when needed
         .bin_d_in(unsigned_result_in),
         .bcd_d_out(bcd_result),
         .conversion_ready(conversion_ready)
@@ -62,7 +59,6 @@ module display_top (
 
         if (reset) begin
             // Reset all display values and conversion flag
-            display_mode <= 2'b00;
             ones <= 4'b0000;
             tens <= 4'b0000;
             hundreds <= 4'b0000;
@@ -71,15 +67,6 @@ module display_top (
             sign <= 0;  // Reset sign flag
             unsigned_result_in <= 32'b0;  // Reset unsigned result
         end else begin
-            // change the display digits
-            if (deb_U && (display_mode < 2'b10)) display_mode <= display_mode + 1;
-            else if (deb_D && (display_mode > 2'b00)) display_mode <= display_mode - 1;
-            else if (deb_C && conversion_done) begin
-                display_mode <= 2'b00;  // Reset display mode
-                conversion_done <= 0;  // Reset conversion flag
-            end
-
-
             // Check if the result is negative and convert to unsigned if necessary
             if (result_in[31] == 1) begin
                 sign <= 1;
@@ -90,7 +77,7 @@ module display_top (
             end
 
             // Trigger conversion when a new segment is selected
-            if (select && !conversion_done) begin
+            if ((select == 2'b01) && !conversion_done) begin
                 if (conversion_ready) begin
                     conversion_done <= 1;  // Mark conversion as done
                     case (display_mode)
@@ -121,7 +108,7 @@ module display_top (
                         end
                     endcase
                 end
-            end else if (!select) begin
+            end else if (select == 2'b00) begin
                 // Reset conversion flag when not in select mode
                 conversion_done <= 0;
 
@@ -130,7 +117,6 @@ module display_top (
                 tens <= data_in_tens;
                 hundreds <= data_in_hundreds;
                 thousands <= data_in_thousands;
-                display_mode <= 2'b00;  // Reset display mode if displaying input
             end
         end
     end

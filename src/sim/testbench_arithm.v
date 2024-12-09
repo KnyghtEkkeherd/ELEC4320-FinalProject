@@ -98,23 +98,67 @@ module top_tb;
         #1_000_000;
 
         // Choose operation: addition: switch[15]
-        // sw[15:5] = 11'b10000000000;
-        // #1_000_000;
-
-        // test displaying of a large number
-        sw[15:5] = 11'b00100000000;
+        sw[15:5] = 11'b10000000000;
         #1_000_000;
 
         // test display advancing
-        btnU = 1;
-        #1_000_000;
-        btnU = 0;
-        #1_000_000;
-        btnU = 1;
-        #1_000_000;
-        btnU = 0;
+        // btnU = 1;
+        // #1_000_000;
+        // btnU = 0;
+        // #1_000_000;
+        // btnU = 1;
+        // #1_000_000;
+        // btnU = 0;
+        // #1_000_000;
 
+        btnC = 1;
+        #1_000_000;
+        btnC = 0;
+        #1_000_000;
 
+        // test adding after clear
+        // input number 999 for A
+        repeat (3) begin
+            repeat (9) begin
+                btnU = 1;
+                #1_000_000;
+                btnU = 0;
+                #1_000_000;
+            end
+
+            btnL = 1;
+            #1_000_000;
+            btnL = 0;
+            #1_000_000;
+        end
+
+        btnC = 1;
+        #1_000_000;
+        btnC = 0;
+        #1_000_000;
+
+        // Input number 999 for B
+        repeat (3) begin
+            repeat (9) begin
+                btnU = 1;
+                #1_000_000;
+                btnU = 0;
+                #1_000_000;
+            end
+
+            btnL = 1;
+            #1_000_000;
+            btnL = 0;
+            #1_000_000;
+        end
+
+        btnC = 1;
+        #1_000_000;
+        btnC = 0;
+        #1_000_000;
+
+        // Choose operation: addition: switch[15]
+        sw[15:5] = 11'b10000000000;
         #1_000_000;
 
         // Continue adding more stimulus as needed
