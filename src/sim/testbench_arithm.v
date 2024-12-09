@@ -107,9 +107,9 @@ module top_tb;
         #1_000_000;
 
         // test adding after clear
-        // input number 999 for A
+        // input number 555 for A
         repeat (3) begin
-            repeat (9) begin
+            repeat (5) begin
                 btnU = 1;
                 #1_000_000;
                 btnU = 0;
@@ -127,9 +127,9 @@ module top_tb;
         btnC = 0;
         #1_000_000;
 
-        // Input number 999 for B
+        // Input number 555 for B
         repeat (3) begin
-            repeat (9) begin
+            repeat (5) begin
                 btnU = 1;
                 #1_000_000;
                 btnU = 0;

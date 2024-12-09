@@ -10,7 +10,8 @@ module top (
     input  [15:0] sw,         // DIP switch inputs 0-15: reset: 0
     output [ 0:6] seg,        // 7 segment display segment pattern
     output [ 3:0] an,         // 7 segment display anodes
-    output [ 1:0] LED         // LEDs to specify the current display mode
+    output [ 1:0] LED,        // LEDs to specify the current display mode
+    output        dp          // display dot point
 );
 
     // Internal wires
