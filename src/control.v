@@ -60,14 +60,17 @@ module control (
                 reset_out <= 0;
                 case (operand_selection)
                     2'b00: begin
+                        // saving input A
                         display_mode_out <= 2'b00;
                         select_out <= 0;
                     end
                     2'b01: begin
+                        // saving input B
                         display_mode_out <= 2'b00;
                         select_out <= 0;
                     end
                     2'b10: begin
+                        // ready to compute - get output C
                         state <= ARITHM;
                     end
                     default: begin

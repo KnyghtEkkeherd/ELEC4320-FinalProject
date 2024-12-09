@@ -33,12 +33,15 @@ module arithmetic_unit (
         end else begin
             case (operand_selection)
                 2'b00: begin
+                    // getting input A
                     operand_A <= input_data;  // Update operand_A
                 end
                 2'b01: begin
+                    // getting input B
                     operand_B <= input_data;  // Update operand_B
                 end
                 2'b10: begin
+                    // getting output C
                     if (!result_ready) begin
                         case (operation)  // operation switch has to be chosen after the inputs
                             11'b10000000000: begin
