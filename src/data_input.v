@@ -177,9 +177,9 @@ module data_input (
                 sign <= 0;
 
                 // confirm inputs A and B
-                if (operand_selection == 0) operand_selection <= 1;  // A ready, now input B
-                else if (operand_selection == 1) operand_selection <= 2;  // B ready, now compute
-                else if (operand_selection == 2) operand_selection <= 0;  // go back
+                if (operand_selection < 2) begin
+                    operand_selection <= operand_selection + 1;
+                end
             end else if (deb_L_out) begin
                 // disregard the thousands place -- just decide whether it is positive or negative
                 if (unit < 4) begin

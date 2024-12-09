@@ -16,7 +16,7 @@ module control (
     input deb_R,
     input result_ready_in,
     input [10:0] operation_in,
-    input operand_selection_in,
+    input [1:0] operand_selection,
     input conversion_ready,
 
     output reg reset_out,
@@ -71,16 +71,22 @@ module control (
             end
             DATA_INPUT: begin
                 reset_out <= 0;
-                if (deb_C && !deb_C_prev) begin
-                    if (deb_C_counter < 2) begin
-                        deb_C_counter <= deb_C_counter + 1;
-                    end else begin
-                        state <= ARITHM;
-                        deb_C_counter <= 0;
+                case (operand_selection)
+                    2'b00: begin
+                        display_mode_out <= 2'b00;
+                        select_out <= 0;
                     end
-                end
-                select_out <= 2'b00;
-                display_mode_out <= 2'b00;
+                    2'b01: begin
+                        display_mode_out <= 2'b00;
+                        select_out <= 0;
+                    end
+                    2'b10: begin
+                        state <= ARITHM;
+                    end
+                    default: begin
+                        state <= INIT;
+                    end
+                endcase
             end
             ARITHM: begin
                 case (operation_in)
