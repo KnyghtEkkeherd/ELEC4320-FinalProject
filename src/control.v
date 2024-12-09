@@ -73,10 +73,10 @@ module control (
                 reset_out <= 0;
                 if (deb_C && !deb_C_prev) begin
                     if (deb_C_counter < 3) begin
+                        deb_C_counter <= deb_C_counter + 1;
+                    end else begin
                         state <= ARITHM;
                         deb_C_counter <= 0;
-                    end else begin
-                        deb_C_counter <= deb_C_counter + 1;
                     end
                 end
                 select_out <= 2'b00;
