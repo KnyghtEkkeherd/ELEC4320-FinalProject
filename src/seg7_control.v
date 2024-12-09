@@ -31,27 +31,27 @@ module seg7_control (
             2'b00: begin
                 anode_activation = 4'b0111;
                 LED_segment = decode_segment(thousands);  // Display thousands
-                dp = (dot == 3'b001) ? 1'b1 : 1'b0;  // Enable dot for thousands
+                dp = (dot == 3'b001) ? 1'b0 : 1'b1;  // Enable dot for thousands
             end
             2'b01: begin
                 anode_activation = 4'b1011;
                 LED_segment = decode_segment(hundreds);  // Display hundreds
-                dp = (dot == 3'b010) ? 1'b1 : 1'b0;  // Enable dot for hundreds
+                dp = (dot == 3'b010) ? 1'b0 : 1'b1;  // Enable dot for hundreds
             end
             2'b10: begin
                 anode_activation = 4'b1101;
                 LED_segment = decode_segment(tens);  // Display tens
-                dp = (dot == 3'b011) ? 1'b1 : 1'b0;  // Enable dot for tens
+                dp = (dot == 3'b011) ? 1'b0 : 1'b1;  // Enable dot for tens
             end
             2'b11: begin
                 anode_activation = 4'b1110;
                 LED_segment = decode_segment(ones);  // Display ones
-                dp = (dot == 3'b100) ? 1'b1 : 1'b0;  // Enable dot for ones
+                dp = (dot == 3'b100) ? 1'b0 : 1'b1;  // Enable dot for ones
             end
             default: begin
                 anode_activation = 4'b1111;
                 LED_segment = 7'b1111111;
-                dp = 1'b0;
+                dp = 1'b1;
             end
         endcase
     end

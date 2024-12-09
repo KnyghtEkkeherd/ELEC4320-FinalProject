@@ -147,19 +147,19 @@ module top_tb;
         btnC = 0;
         #1_000_000;
 
-        // Choose operation: big number display
-        sw[15:5] = 11'b00100000000;
-        #10_000_000;
+        // Choose operation: test floating point
+        sw[15:5] = 11'b00010000000;
+        // #10_000_000;
 
-        //test display advancing
-        btnU = 1;
-        #1_000_000;
-        btnU = 0;
-        #1_000_000;
+        // //test display advancing
+        // btnU = 1;
+        // #1_000_000;
+        // btnU = 0;
+        // #1_000_000;
 
-        btnU = 1;
-        #1_000_000;
-        btnU = 0;
+        // btnU = 1;
+        // #1_000_000;
+        // btnU = 0;
 
         #1_000_000_000;
 

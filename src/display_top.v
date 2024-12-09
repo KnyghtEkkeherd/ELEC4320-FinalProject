@@ -122,10 +122,10 @@ module display_top (
                 end
                 2'b10: begin
                     // Display the float result
-                    ones <= 4'b1010;  // "-"
-                    tens <= 4'b1010;
-                    hundreds <= 4'b1010;
-                    thousands <= 4'b1010;
+                    ones <= bcd_result[3:0];
+                    tens <= bcd_result[7:4];
+                    hundreds <= bcd_result[11:8];
+                    thousands <= bcd_result[15:12];
                     dot <= 3'b010;  // point for tens place
                 end
                 default: begin

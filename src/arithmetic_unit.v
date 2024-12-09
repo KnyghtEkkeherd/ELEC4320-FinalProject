@@ -53,6 +53,10 @@ module arithmetic_unit (
                                 result = 12345;
                                 result_ready = 1;
                             end
+                            11'b00010000000: begin  // DIV for float testing
+                                result = 6789;
+                                result_ready = 1;
+                            end
                             default: begin
                                 result <= 32'b0;  // Default case
                             end
