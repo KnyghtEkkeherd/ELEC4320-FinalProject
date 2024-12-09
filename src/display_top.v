@@ -92,6 +92,7 @@ module display_top (
                 end
                 2'b01: begin
                     // Display the integer values
+                    dot <= 3'b000;
                     case (display_mode)
                         2'b00: begin
                             ones <= bcd_result[3:0];

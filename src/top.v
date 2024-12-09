@@ -89,6 +89,7 @@ module top (
         .conversion_ready(conversion_ready),
         .an_out(an),
         .seg_out(seg),
-        .LEDs_out(LED)
+        .LEDs_out(LED),
+        .dp(dp)
     );
 endmodule
