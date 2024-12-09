@@ -72,7 +72,7 @@ module control (
             DATA_INPUT: begin
                 reset_out <= 0;
                 if (deb_C && !deb_C_prev) begin
-                    if (deb_C_counter < 3) begin
+                    if (deb_C_counter < 2) begin
                         deb_C_counter <= deb_C_counter + 1;
                     end else begin
                         state <= ARITHM;
