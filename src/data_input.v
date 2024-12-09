@@ -83,11 +83,8 @@ module data_input (
 
     wire slow_clk_signal;
     // assign wires to registers from the debouncing circuit
-    wire deb_C_out;
     wire deb_L_out;
     wire deb_R_out;
-    wire deb_U_out;
-    wire deb_D_out;
 
     reg [15:0] input_data;
     reg [1:0] unit;  // 2 bit unit: thousands, hundreds, tens, ones

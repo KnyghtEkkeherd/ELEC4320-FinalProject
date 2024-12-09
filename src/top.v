@@ -23,7 +23,7 @@ module top (
     wire [31:0] result;
     wire        result_ready;
     wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
-    wire deb_C_out, deb_U_out, deb_D_out;
+    wire deb_U_out, deb_D_out;
     wire [1:0] select_out;
     wire [1:0] display_mode;
     wire conversion_en, conversion_ready;
@@ -34,7 +34,6 @@ module top (
         .CLK100MHz(CLK100MHZ),
         .sw(sw),
         .deb_U(deb_U_out),
-        .deb_C(deb_C_out),
         .deb_D(deb_D_out),
         .result_ready_in(result_ready),
         .operation_in(operation),

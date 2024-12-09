@@ -31,7 +31,6 @@ module display_top (
     reg [3:0] ones, tens, hundreds, thousands;
     reg [2:0] dot;  // index of the display dot point
     wire [39:0] bcd_result;  // Adjusted to match the 16-bit BCD output
-    wire conversion_ready;
     reg conversion_done;  // Flag to indicate if conversion has been done
     reg sign;  // Flag to indicate if the number is negative
     reg [31:0] unsigned_result_in;  // Unsigned representation of result_in

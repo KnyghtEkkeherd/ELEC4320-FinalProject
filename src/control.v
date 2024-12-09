@@ -11,9 +11,6 @@ module control (
     input [15:0] sw,
     input deb_U,
     input deb_D,
-    input deb_C,
-    input deb_L,
-    input deb_R,
     input result_ready_in,
     input [10:0] operation_in,
     input [1:0] operand_selection,
@@ -33,41 +30,31 @@ module control (
     parameter INT = 1'b0;
     parameter FLOAT = 1'b1;
     reg result_type;
-
-    reg [2:0] deb_C_counter;
     reg conversion_done;
 
-    reg deb_U_prev, deb_D_prev, deb_C_prev, deb_L_prev, deb_R_prev;
+    reg deb_U_prev, deb_D_prev;
 
     always @(posedge CLK100MHz) begin
         if (sw[0]) begin
             state <= INIT;
             reset_out <= 1;
-            deb_C_counter <= 0;
             select_out <= 0;
             display_mode_out <= 0;
             result_type <= 0;
             conversion_done <= 0;
             deb_U_prev <= 0;
             deb_D_prev <= 0;
-            deb_C_prev <= 0;
-            deb_L_prev <= 0;
-            deb_R_prev <= 0;
         end
         case (state)
             INIT: begin
-                state <= DATA_INPUT;
                 reset_out <= 1;
-                deb_C_counter <= 0;
+                state <= DATA_INPUT;
                 select_out <= 0;
                 display_mode_out <= 0;
                 result_type <= 0;
                 conversion_done <= 0;
                 deb_U_prev <= 0;
                 deb_D_prev <= 0;
-                deb_C_prev <= 0;
-                deb_L_prev <= 0;
-                deb_R_prev <= 0;
             end
             DATA_INPUT: begin
                 reset_out <= 0;
@@ -108,9 +95,7 @@ module control (
                 end
             end
             DISPLAY_RES: begin
-                if (deb_C && !deb_C_prev) begin
-                    state <= INIT;
-                end else if (!conversion_done) begin
+                if (!conversion_done) begin
                     conversion_en <= 1;
                     if (conversion_ready) begin
                         conversion_done <= 1;
@@ -142,8 +127,5 @@ module control (
 
         deb_U_prev <= deb_U;
         deb_D_prev <= deb_D;
-        deb_C_prev <= deb_C;
-        deb_L_prev <= deb_L;
-        deb_R_prev <= deb_R;
     end
 endmodule
