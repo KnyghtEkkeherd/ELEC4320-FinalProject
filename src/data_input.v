@@ -73,7 +73,8 @@ module data_input (
     output reg [15:0] operandB,
     output reg [1:0] chosen_adder,
     output reg [1:0] chosen_operand,
-    output reg input_ready
+    output reg input_ready,
+    output reg clear
 );
 
     wire slow_clk_signal;
@@ -133,6 +134,7 @@ module data_input (
     );
 
     always @(posedge slow_clk_signal or posedge reset) begin
+        clear <= 0;
         if (reset) begin
             operandA <= 16'b0;
             operandB <= 16'b0;
@@ -145,6 +147,7 @@ module data_input (
                 chosen_adder <= BRENT_KUNG;
             end else if (deb_C_out) begin
                 chosen_adder <= KOGGE_STONE;
+                clear <= 1;  // clear the result and go back to the input state
             end else if (deb_D_out) begin
                 operandA <= sw;
                 chosen_operand <= OPERAND_A;

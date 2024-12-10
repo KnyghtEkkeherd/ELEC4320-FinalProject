@@ -13,10 +13,12 @@ module display_top (
     input [1:0] chosen_operand,
     input [15:0] operandA,
     input [15:0] operandB,
+    input [31:0] result,
 
     output [3:0] an,
     output [6:0] seg,
-    output dp
+    output dp,
+    output reg [15:0] LED
 );
     reg [3:0] hex_0, hex_1, hex_2, hex_3;
     wire [3:0] ones, tens, hundreds, thousands;
@@ -51,6 +53,7 @@ module display_top (
             hex_2 <= 4'b0000;
             hex_3 <= 4'b0000;
             dot   <= 0;
+            LED   <= 16'b0000000000000000;
         end
         case (display_mode)
             2'b00: begin
@@ -83,6 +86,10 @@ module display_top (
             end
             2'b10: begin
                 // display the result
+                hex_0 <= result[3:0];  // Bits 0 to 3
+                hex_1 <= result[7:4];  // Bits 4 to 7
+                hex_2 <= result[11:8];  // Bits 8 to 11
+                hex_3 <= result[15:12];  // Bits 12 to 15
             end
             default: begin
                 hex_0 <= 4'b0000;

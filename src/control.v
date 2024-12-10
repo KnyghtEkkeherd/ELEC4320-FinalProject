@@ -11,6 +11,7 @@ module control (
     input [1:0] chosen_adder,
     input [1:0] chosen_operand,
     input computation_ready,
+    input clear,
 
     output reg input_en,
     output reg arithm_en,
@@ -33,6 +34,7 @@ module control (
                 state <= DATA_IN;
                 display_mode <= 2'b00;
                 input_en <= 0;
+                arithm_en <= 0;
             end
             DATA_IN: begin
                 reset_out <= 0;
@@ -56,6 +58,11 @@ module control (
             end
             DISPLAY_RESULT: begin
                 display_mode <= 2'b10;
+                input_en <= 1;
+                if (clear) begin
+                    state <= INIT;
+                    input_en <= 0;
+                end
             end
             default: begin
                 state <= INIT;

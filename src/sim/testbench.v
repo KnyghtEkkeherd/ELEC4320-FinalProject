@@ -54,7 +54,7 @@ module tb_top;
         sw   = 16'b1100000000000110;  // Set first switch
         #1_000_000;  // Wait for a clock cycle
 
-        // Test case 3: Choose operand A
+        // Choose operand A
         btnD = 1;
         #1_000_000;
         btnD = 0;
@@ -62,22 +62,70 @@ module tb_top;
 
         #10_000_000;
 
-        // Test case 5: Set another switch
+        // Set another switch
         sw = 16'b0000001100000010;  // Set second switch
         #1_000_000;
 
-        // Test case 6: choose operand B
+        // Choose operand B
         btnL = 1;
         #1_000_000;
         btnL = 0;
         #1_000_000;
 
-        // Test case 7: finish the input
+        // Finish the input
         btnR = 1;
         #1_000_000;
         btnR = 0;
         #1_000_000;
 
+        // Clear the display and start inputting again
+        #10_000_000;
+        btnC = 1;
+        #1_000_000;
+        btnC = 0;
+        #1_000_000;
+
+        // Another rounds of inputs
+
+        // Test case 2: Choose Kogge-Stone
+        btnU = 1;
+        #1_000_000;  // Wait for a clock cycle
+        btnU = 0;
+
+        // Test case 2: Set switch values
+        sw   = 16'b1100000000000110;  // Set first switch
+        #1_000_000;  // Wait for a clock cycle
+
+        // Choose operand A
+        btnD = 1;
+        #1_000_000;
+        btnD = 0;
+        #1_000_000;
+
+        #10_000_000;
+
+        // Set another switch
+        sw = 16'b0000001100000010;  // Set second switch
+        #1_000_000;
+
+        // Choose operand B
+        btnL = 1;
+        #1_000_000;
+        btnL = 0;
+        #1_000_000;
+
+        // Finish the input
+        btnR = 1;
+        #1_000_000;
+        btnR = 0;
+        #1_000_000;
+
+        // Clear the display and start inputting again
+        #10_000_000;
+        btnC = 1;
+        #1_000_000;
+        btnC = 0;
+        #1_000_000;
     end
 
     // Monitor outputs

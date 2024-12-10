@@ -10,7 +10,7 @@ module top (
     input  [15:0] sw,         // DIP switch inputs 0-15: reset: 0
     output [ 0:6] seg,        // 7 segment display segment pattern
     output [ 3:0] an,         // 7 segment display anodes
-    output [ 1:0] LED,        // LEDs to specify the current display mode
+    output [15:0] LED,        // LEDs to specify the current display mode
     output        dp          // display dot point
 );
 
@@ -23,6 +23,7 @@ module top (
     wire input_ready, computation_ready;
     wire [1:0] display_mode;
     wire reset;
+    wire clear;
 
     data_input input_control (
         .clk(CLK100MHZ),
@@ -38,7 +39,8 @@ module top (
         .operandB(operandB),
         .chosen_adder(chosen_adder),
         .chosen_operand(chosen_operand),
-        .input_ready(input_ready)
+        .input_ready(input_ready),
+        .clear(clear)
     );
 
     arithm arithm_unit (
@@ -61,7 +63,8 @@ module top (
         .input_en(input_en),
         .arithm_en(arithm_en),
         .display_mode(display_mode),
-        .reset_out(reset)
+        .reset_out(reset),
+        .clear(clear)
     );
 
     display_top display_unit (
@@ -71,9 +74,11 @@ module top (
         .chosen_operand(chosen_operand),
         .operandA(operandA),
         .operandB(operandB),
+        .result(result),
         .an(an),
         .seg(seg),
-        .dp(dp)
+        .dp(dp),
+        .LED(LED)
     );
 
 endmodule

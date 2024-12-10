@@ -26,7 +26,7 @@ module arithm (
         if (reset) begin
             result <= 0;
             computation_ready <= 0;
-        end else begin
+        end else if (en) begin
             case (chosen_adder)
                 CARRY_SKIP: begin
                     result <= operandA + operandB;
