@@ -14,81 +14,66 @@ module top (
     output        dp          // display dot point
 );
 
-    // Internal wires
-    wire w_10Hz;
-    wire [3:0] data_in_ones, data_in_tens, data_in_hundreds, data_in_sign;
-    wire [15:0] input_data_out;
-    wire [ 1:0] operand_selection;  // 0:A is being input, 1:B is being input, 2:ready to compute
-    wire        reset;
+    wire input_en, arithm_en;
+    wire [15:0] operandA;
+    wire [15:0] operandB;
     wire [31:0] result;
-    wire        result_ready;
-    wire [10:0] operation = sw[15:5];  // 11 switches, each for one operation
-    wire deb_U_out, deb_D_out;
-    wire [1:0] select_out;
+    wire [ 1:0] chosen_adder;
+    wire [ 1:0] chosen_operand;
+    wire input_ready, computation_ready;
     wire [1:0] display_mode;
-    wire conversion_en, conversion_ready;
+    wire reset;
 
-    // Instantiate inner design modules
-
-    control control_inst (
-        .CLK100MHz(CLK100MHZ),
-        .sw(sw),
-        .deb_U(deb_U_out),
-        .deb_D(deb_D_out),
-        .result_ready_in(result_ready),
-        .operation_in(operation),
-        .conversion_ready(conversion_ready),
-        .operand_selection(operand_selection),
-        .reset_out(reset),
-        .select_out(select_out),
-        .display_mode_out(display_mode),
-        .conversion_en(conversion_en)
-    );
-
-    data_input button_input (
-        .bt_C(btnC),
+    data_input input_control (
+        .clk(CLK100MHZ),
+        .reset(reset),
         .bt_U(btnU),
         .bt_L(btnL),
         .bt_R(btnR),
         .bt_D(btnD),
+        .bt_C(btnC),
+        .sw(sw),
+        .en(input_en),
+        .operandA(operandA),
+        .operandB(operandB),
+        .chosen_adder(chosen_adder),
+        .chosen_operand(chosen_operand),
+        .input_ready(input_ready)
+    );
+
+    arithm arithm_unit (
         .clk(CLK100MHZ),
         .reset(reset),
-        .input_data_out(input_data_out),
-        .ones_out(data_in_ones),
-        .tens_out(data_in_tens),
-        .hundreds_out(data_in_hundreds),
-        .sign_out(data_in_sign),
-        .operand_selection(operand_selection),
-        .deb_C_out(deb_C_out),
-        .deb_U_out(deb_U_out),
-        .deb_D_out(deb_D_out)
+        .operandA(operandA),
+        .operandB(operandB),
+        .chosen_adder(chosen_adder),
+        .en(arithm_en),
+        .result(result),
+        .computation_ready(computation_ready)
     );
 
-    arithmetic_unit arith_unit (
-        .input_data(input_data_out),
-        .operand_selection(operand_selection),
-        .operation(operation),
-        .CLK100MHz(CLK100MHZ),
-        .reset(reset),
-        .result_out(result),
-        .result_ready_out(result_ready)
-    );
-
-    display_top disp_top (
-        .CLK100MHz(CLK100MHZ),
-        .reset(reset),
-        .select(select_out),
-        .result_in(result),
-        .data_in_ones(data_in_ones),
-        .data_in_tens(data_in_tens),
-        .data_in_hundreds(data_in_hundreds),
-        .data_in_thousands(data_in_sign),
+    control control_unit (
+        .clk(CLK100MHZ),
+        .input_ready(input_ready),
+        .chosen_adder(chosen_adder),
+        .chosen_operand(chosen_operand),
+        .computation_ready(computation_ready),
+        .input_en(input_en),
+        .arithm_en(arithm_en),
         .display_mode(display_mode),
-        .conversion_en(conversion_en),
-        .conversion_ready(conversion_ready),
-        .an_out(an),
-        .seg_out(seg),
-        .LEDs_out(LED),
+        .reset_out(reset)
+    );
+
+    display_top display_unit (
+        .clk(CLK100MHZ),
+        .reset(reset),  // find a reset button!
+        .display_mode(display_mode),
+        .chosen_operand(chosen_operand),
+        .operandA(operandA),
+        .operandB(operandB),
+        .an(an),
+        .seg(seg),
         .dp(dp)
     );
+
 endmodule

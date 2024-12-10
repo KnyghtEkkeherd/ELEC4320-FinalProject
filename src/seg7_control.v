@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps `timescale 1ns / 1ps
 
 module seg7_control (
-    input            clock,
+    input            clk,
     input            reset,
     input      [3:0] ones,              // Input for ones digit
     input      [3:0] tens,              // Input for tens digit
@@ -16,7 +16,7 @@ module seg7_control (
     reg  [19:0] refresh_counter;
     wire [ 1:0] LED_activating_counter;
 
-    always @(posedge clock or posedge reset) begin
+    always @(posedge clk or posedge reset) begin
         if (reset) begin
             refresh_counter <= 0;
         end else begin
@@ -69,7 +69,12 @@ module seg7_control (
                 4'b0111: decode_segment = 7'b0001111;  // "7"
                 4'b1000: decode_segment = 7'b0000000;  // "8"
                 4'b1001: decode_segment = 7'b0000100;  // "9"
-                4'b1010: decode_segment = 7'b1111110;  // "-"
+                4'b1010: decode_segment = 7'b0001000;  // "A"
+                4'b1011: decode_segment = 7'b1100000;  // "B"
+                4'b1100: decode_segment = 7'b0110001;  // "C"
+                4'b1101: decode_segment = 7'b1000010;  // "D"
+                4'b1110: decode_segment = 7'b0110000;  // "E"
+                4'b1111: decode_segment = 7'b0111000;  // "F"
                 default: decode_segment = 7'b0000001;  // "0"
             endcase
         end
