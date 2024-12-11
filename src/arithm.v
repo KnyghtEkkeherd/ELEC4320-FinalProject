@@ -14,7 +14,8 @@ module arithm (
     input en,
 
     output reg [31:0] result,
-    output reg computation_ready
+    output reg computation_ready,
+    output reg overflow_flag
 );
     parameter CARRY_SKIP = 2'b00;
     parameter BRENT_KUNG = 2'b01;
@@ -26,6 +27,7 @@ module arithm (
         if (reset) begin
             result <= 0;
             computation_ready <= 0;
+            overflow_flag <= 0;
         end else if (en) begin
             case (chosen_adder)
                 CARRY_SKIP: begin

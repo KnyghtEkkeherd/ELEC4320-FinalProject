@@ -24,6 +24,7 @@ module top (
     wire [1:0] display_mode;
     wire reset;
     wire clear;
+    wire overflow_flag;
 
     data_input input_control (
         .clk(CLK100MHZ),
@@ -51,7 +52,8 @@ module top (
         .chosen_adder(chosen_adder),
         .en(arithm_en),
         .result(result),
-        .computation_ready(computation_ready)
+        .computation_ready(computation_ready),
+        .overflow_flag(overflow_flag)
     );
 
     control control_unit (
@@ -65,7 +67,8 @@ module top (
         .display_mode(display_mode),
         .reset_out(reset),
         .clear(clear),
-        .LED(LED)
+        .LED(LED),
+        .overflow_flag(overflow_flag)
     );
 
     display_top display_unit (

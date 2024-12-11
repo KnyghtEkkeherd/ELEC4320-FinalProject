@@ -12,6 +12,7 @@ module control (
     input [1:0] chosen_operand,
     input computation_ready,
     input clear,
+    input overflow_flag,
 
     output reg input_en,
     output reg arithm_en,
@@ -29,7 +30,7 @@ module control (
     reg [2:0] state;
 
     always @(posedge clk) begin
-        LED <= {13'b0, state};
+        LED <= {overflow_flag, 12'b0, state};
         case (state)
             INIT: begin
                 reset_out <= 1;
