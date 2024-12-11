@@ -52,7 +52,7 @@ module carry_skip_adder_block (
     );
 endmodule
 
-module carry_skip_adder(
+module carry_skip_adder8bit(
 input [7:0] A,
 input [7:0] B,
 input Cin,
