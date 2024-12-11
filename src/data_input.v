@@ -133,17 +133,15 @@ module data_input (
         .button_out(deb_D_out)
     );
 
-    always @(posedge reset) begin
-        operandA <= 16'b0;
-        operandB <= 16'b0;
-        chosen_adder <= 2'b00;
-        input_ready <= 0;
-        chosen_operand <= 0;
-        clear <= 0;
-    end
-
-    always @(posedge slow_clk_signal) begin
-        if (en) begin
+    always @(posedge slow_clk_signal or posedge reset) begin
+        if (reset) begin
+            operandA <= 16'b0;
+            operandB <= 16'b0;
+            chosen_adder <= 2'b00;
+            input_ready <= 0;
+            chosen_operand <= 0;
+            clear <= 0;
+        end else if (en) begin
             if (deb_U_out) begin
                 chosen_adder <= BRENT_KUNG;
             end else if (deb_C_out) begin
