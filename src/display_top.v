@@ -17,8 +17,7 @@ module display_top (
 
     output [3:0] an,
     output [6:0] seg,
-    output dp,
-    output reg [15:0] LED
+    output dp
 );
     reg [3:0] hex_0, hex_1, hex_2, hex_3;
     wire [3:0] ones, tens, hundreds, thousands;
@@ -53,7 +52,6 @@ module display_top (
             hex_2 <= 4'b0000;
             hex_3 <= 4'b0000;
             dot   <= 0;
-            LED   <= 16'b0000000000000000;
         end
         case (display_mode)
             2'b00: begin

@@ -126,6 +126,51 @@ module tb_top;
         #1_000_000;
         btnC = 0;
         #1_000_000;
+
+
+        // Test case 3: test changing the values of the same operand
+        sw = 16'b1100000010000110;  // Set first switch
+        #1_000_000;  // Wait for a clock cycle
+
+        // Choose operand A
+        btnD = 1;
+        #1_000_000;
+        btnD = 0;
+        #1_000_000;
+
+        #10_000_000;
+
+        // Set another switch
+        sw = 16'b0000001100001010;  // Set second switch
+        #1_000_000;
+
+        // Choose operand A
+        btnD = 1;
+        #1_000_000;
+        btnD = 0;
+        #1_000_000;
+
+        // Test case 3: test changing the values of the same operand
+        sw = 16'b1100011000000110;  // Set first switch
+        #1_000_000;  // Wait for a clock cycle
+
+        // Choose operand B
+        btnL = 1;
+        #1_000_000;
+        btnL = 0;
+        #1_000_000;
+
+        #10_000_000;
+
+        // Set another switch
+        sw = 16'b1100001100000010;  // Set second switch
+        #1_000_000;
+
+        // Choose operand B
+        btnL = 1;
+        #1_000_000;
+        btnL = 0;
+        #1_000_000;
     end
 
     // Monitor outputs
