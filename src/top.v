@@ -64,7 +64,8 @@ module top (
         .arithm_en(arithm_en),
         .display_mode(display_mode),
         .reset_out(reset),
-        .clear(clear)
+        .clear(clear),
+        .LED(LED)
     );
 
     display_top display_unit (
@@ -77,8 +78,7 @@ module top (
         .result(result),
         .an(an),
         .seg(seg),
-        .dp(dp),
-        .LED(LED)
+        .dp(dp)
     );
 
 endmodule

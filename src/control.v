@@ -16,7 +16,8 @@ module control (
     output reg input_en,
     output reg arithm_en,
     output reg [1:0] display_mode,
-    output reg reset_out
+    output reg reset_out,
+    output reg [15:0] LED
 );
 
     parameter [2:0] INIT = 3'b000;
@@ -28,6 +29,7 @@ module control (
     reg [2:0] state;
 
     always @(posedge clk) begin
+        LED <= {13'b0, state};
         case (state)
             INIT: begin
                 reset_out <= 1;
@@ -35,6 +37,7 @@ module control (
                 display_mode <= 2'b00;
                 input_en <= 0;
                 arithm_en <= 0;
+                LED <= 16'b0;
             end
             DATA_IN: begin
                 reset_out <= 0;

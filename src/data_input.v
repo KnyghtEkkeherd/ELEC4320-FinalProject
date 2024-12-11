@@ -144,17 +144,22 @@ module data_input (
         end else if (en) begin
             if (deb_U_out) begin
                 chosen_adder <= BRENT_KUNG;
+                clear <= 0;
             end else if (deb_C_out) begin
                 chosen_adder <= KOGGE_STONE;
-                clear <= 1;  // clear the result and go back to the input state
+                if (clear) clear <= 1;  // clear the result and go back to the input state
+                else clear <= 0;
             end else if (deb_D_out) begin
                 operandA <= sw;
                 chosen_operand <= OPERAND_A;
+                clear <= 0;
             end else if (deb_L_out) begin
                 operandB <= sw;
                 chosen_operand <= OPERAND_B;
+                clear <= 0;
             end else if (deb_R_out) begin
                 input_ready <= 1;
+                clear <= 0;
             end
         end
     end
