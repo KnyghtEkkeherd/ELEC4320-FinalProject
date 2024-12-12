@@ -128,7 +128,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[1]),
         .Gi_1(G0[1]),
         .Gi  (G1[0]),
-        .Aout(A1[0]),
+        .Aout(A1[1]),
         .Gout(G1[1])
     );
     white_dot white_dot1 (
@@ -136,7 +136,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[2]),
         .Gi_1(G0[2]),
         .Gi  (G1[1]),
-        .Aout(A1[1]),
+        .Aout(A1[2]),
         .Gout(G1[2])
     );
     white_dot white_dot2 (
@@ -144,7 +144,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[3]),
         .Gi_1(G0[3]),
         .Gi  (G1[2]),
-        .Aout(A1[2]),
+        .Aout(A1[3]),
         .Gout(G1[3])
     );
     white_dot white_dot3 (
@@ -152,7 +152,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[4]),
         .Gi_1(G0[4]),
         .Gi  (G1[3]),
-        .Aout(A1[3]),
+        .Aout(A1[4]),
         .Gout(G1[4])
     );
     white_dot white_dot4 (
@@ -160,7 +160,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[5]),
         .Gi_1(G0[5]),
         .Gi  (G1[4]),
-        .Aout(A1[4]),
+        .Aout(A1[5]),
         .Gout(G1[5])
     );
     white_dot white_dot5 (
@@ -168,7 +168,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[6]),
         .Gi_1(G0[6]),
         .Gi  (G1[5]),
-        .Aout(A1[5]),
+        .Aout(A1[6]),
         .Gout(G1[6])
     );
     white_dot white_dot6 (
@@ -176,7 +176,7 @@ module kogge_stone_adder8bit (
         .Ai_1(A0[7]),
         .Gi_1(G0[7]),
         .Gi  (G1[6]),
-        .Aout(A1[6]),
+        .Aout(A1[7]),
         .Gout(G1[7])
     );
 

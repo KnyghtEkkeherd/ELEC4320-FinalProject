@@ -57,7 +57,7 @@ module kogge_stone_adder16bit (
     wire [15:0] G1, A1;
     wire [15:0] G2, A2;
     wire [15:0] G3, A3;
-    wire [15:0] G4, A4;
+    wire [15:0] G4;
 
     // Preprocessing stage
     entry entry0 (
@@ -184,7 +184,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[1]),
         .Gi_1(G0[1]),
         .Gi  (G1[0]),
-        .Aout(A1[0]),
+        .Aout(A1[1]),
         .Gout(G1[1])
     );
     white_dot white_dot1 (
@@ -192,7 +192,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[2]),
         .Gi_1(G0[2]),
         .Gi  (G1[1]),
-        .Aout(A1[1]),
+        .Aout(A1[2]),
         .Gout(G1[2])
     );
     white_dot white_dot2 (
@@ -200,7 +200,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[3]),
         .Gi_1(G0[3]),
         .Gi  (G1[2]),
-        .Aout(A1[2]),
+        .Aout(A1[3]),
         .Gout(G1[3])
     );
     white_dot white_dot3 (
@@ -208,7 +208,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[4]),
         .Gi_1(G0[4]),
         .Gi  (G1[3]),
-        .Aout(A1[3]),
+        .Aout(A1[4]),
         .Gout(G1[4])
     );
     white_dot white_dot4 (
@@ -216,7 +216,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[5]),
         .Gi_1(G0[5]),
         .Gi  (G1[4]),
-        .Aout(A1[4]),
+        .Aout(A1[5]),
         .Gout(G1[5])
     );
     white_dot white_dot5 (
@@ -224,7 +224,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[6]),
         .Gi_1(G0[6]),
         .Gi  (G1[5]),
-        .Aout(A1[5]),
+        .Aout(A1[6]),
         .Gout(G1[6])
     );
     white_dot white_dot6 (
@@ -232,7 +232,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[7]),
         .Gi_1(G0[7]),
         .Gi  (G1[6]),
-        .Aout(A1[6]),
+        .Aout(A1[7]),
         .Gout(G1[7])
     );
     white_dot white_dot7 (
@@ -240,7 +240,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[8]),
         .Gi_1(G0[8]),
         .Gi  (G1[7]),
-        .Aout(A1[7]),
+        .Aout(A1[8]),
         .Gout(G1[8])
     );
     white_dot white_dot8 (
@@ -248,7 +248,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[9]),
         .Gi_1(G0[9]),
         .Gi  (G1[8]),
-        .Aout(A1[8]),
+        .Aout(A1[9]),
         .Gout(G1[9])
     );
     white_dot white_dot9 (
@@ -256,7 +256,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[10]),
         .Gi_1(G0[10]),
         .Gi  (G1[9]),
-        .Aout(A1[9]),
+        .Aout(A1[10]),
         .Gout(G1[10])
     );
     white_dot white_dot10 (
@@ -264,7 +264,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[11]),
         .Gi_1(G0[11]),
         .Gi  (G1[10]),
-        .Aout(A1[10]),
+        .Aout(A1[11]),
         .Gout(G1[11])
     );
     white_dot white_dot11 (
@@ -272,7 +272,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[12]),
         .Gi_1(G0[12]),
         .Gi  (G1[11]),
-        .Aout(A1[11]),
+        .Aout(A1[12]),
         .Gout(G1[12])
     );
     white_dot white_dot12 (
@@ -280,7 +280,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[13]),
         .Gi_1(G0[13]),
         .Gi  (G1[12]),
-        .Aout(A1[12]),
+        .Aout(A1[13]),
         .Gout(G1[13])
     );
     white_dot white_dot13 (
@@ -288,7 +288,7 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[14]),
         .Gi_1(G0[14]),
         .Gi  (G1[13]),
-        .Aout(A1[13]),
+        .Aout(A1[14]),
         .Gout(G1[14])
     );
     white_dot white_dot14 (
@@ -296,20 +296,13 @@ module kogge_stone_adder16bit (
         .Ai_1(A0[15]),
         .Gi_1(G0[15]),
         .Gi  (G1[14]),
-        .Aout(A1[14]),
-        .Gout(G1[15])
-    );
-    white_dot white_dot15 (
-        .Ai  (A0[15]),
-        .Ai_1(A0[15]),
-        .Gi_1(G0[15]),
-        .Gi  (G1[15]),
         .Aout(A1[15]),
         .Gout(G1[15])
     );
 
     // Level 2
     assign G2[0] = G1[0];
+
     grey_dot grey_dot1 (
         .Gi_1(G1[1]),
         .Ai_1(A1[1]),
@@ -430,6 +423,7 @@ module kogge_stone_adder16bit (
     assign G3[0] = G2[0];
     assign G3[1] = G2[1];
     assign G3[2] = G2[2];
+
     grey_dot grey_dot3 (
         .Gi_1(G2[3]),
         .Ai_1(A2[3]),
