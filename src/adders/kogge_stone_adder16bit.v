@@ -539,49 +539,49 @@ module kogge_stone_adder16bit (
     grey_dot grey_dot8 (
         .Gi_1(G3[8]),
         .Ai_1(A3[8]),
-        .Gi  (Cin),
+        .Gi  (G3[0]),
         .Gout(G4[8])
     );
     grey_dot grey_dot9 (
         .Gi_1(G3[9]),
         .Ai_1(A3[9]),
-        .Gi  (G3[0]),
+        .Gi  (G3[1]),
         .Gout(G4[9])
     );
     grey_dot grey_dot10 (
         .Gi_1(G3[10]),
         .Ai_1(A3[10]),
-        .Gi  (G3[1]),
+        .Gi  (G3[2]),
         .Gout(G4[10])
     );
     grey_dot grey_dot11 (
         .Gi_1(G3[11]),
         .Ai_1(A3[11]),
-        .Gi  (G3[2]),
+        .Gi  (G3[3]),
         .Gout(G4[11])
     );
     grey_dot grey_dot12 (
         .Gi_1(G3[12]),
         .Ai_1(A3[12]),
-        .Gi  (G3[3]),
+        .Gi  (G3[4]),
         .Gout(G4[12])
     );
     grey_dot grey_dot13 (
         .Gi_1(G3[13]),
         .Ai_1(A3[13]),
-        .Gi  (G3[4]),
+        .Gi  (G3[5]),
         .Gout(G4[13])
     );
     grey_dot grey_dot14 (
         .Gi_1(G3[14]),
         .Ai_1(A3[14]),
-        .Gi  (G3[5]),
+        .Gi  (G3[6]),
         .Gout(G4[14])
     );
     grey_dot grey_dot15 (
         .Gi_1(G3[15]),
         .Ai_1(A3[15]),
-        .Gi  (G3[6]),
+        .Gi  (G3[7]),
         .Gout(G4[15])
     );
 
