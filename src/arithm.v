@@ -13,14 +13,23 @@ module arithm (
     input [1:0] chosen_adder,
     input en,
 
-    output reg [31:0] result,
+    output reg [15:0] result,
     output reg computation_ready,
     output reg overflow_flag
 );
-    parameter CARRY_SKIP = 2'b00;
-    parameter BRENT_KUNG = 2'b01;
-    parameter KOGGE_STONE = 2'b10;
-    parameter CARRY_SELECT = 2'b11;
+    parameter [1:0] BRENT_KUNG = 2'b01;
+    parameter [1:0] KOGGE_STONE = 2'b10;
+
+    wire [15:0] ksa_sum;
+    wire ksa_cout;
+
+    kogge_stone_adder16bit KSA (
+        .A(operandA),
+        .B(operandB),
+        .Cin(1'b0),
+        .S(ksa_sum),
+        .Cout(ksa_cout)
+    );
 
     // Put the adder modules here:
     always @(posedge clk or posedge reset) begin
@@ -30,24 +39,17 @@ module arithm (
             overflow_flag <= 0;
         end else if (en) begin
             case (chosen_adder)
-                CARRY_SKIP: begin
-                    result <= operandA + operandB;
-                    computation_ready <= 1;
-                end
                 BRENT_KUNG: begin
-                    result <= operandA + operandB;
-                    computation_ready <= 1;
+                    result = 0;
+                    computation_ready = 1;
                 end
                 KOGGE_STONE: begin
-                    result <= operandA + operandB;
-                    computation_ready <= 1;
-                end
-                CARRY_SELECT: begin
-                    result <= operandA + operandB;
-                    computation_ready <= 1;
+                    result = ksa_sum;
+                    overflow_flag = ksa_cout;
+                    computation_ready = 1;
                 end
                 default: begin
-                    result <= operandA + operandB;
+                    result <= 0;
                     computation_ready <= 1;
                 end
             endcase
