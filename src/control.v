@@ -63,6 +63,7 @@ module control (
             DISPLAY_RESULT: begin
                 display_mode <= 2'b10;
                 input_en <= 1;
+                LED[15] <= overflow_flag;
                 if (clear) begin
                     state <= INIT;
                     input_en <= 0;
