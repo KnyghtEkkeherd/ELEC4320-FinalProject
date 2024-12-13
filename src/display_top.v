@@ -13,7 +13,7 @@ module display_top (
     input [1:0] chosen_operand,
     input [15:0] operandA,
     input [15:0] operandB,
-    input [31:0] result,
+    input [15:0] result,
 
     output [3:0] an,
     output [6:0] seg,

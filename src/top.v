@@ -17,7 +17,7 @@ module top (
     wire input_en, arithm_en;
     wire [15:0] operandA;
     wire [15:0] operandB;
-    wire [31:0] result;
+    wire [15:0] result;
     wire [ 1:0] chosen_adder;
     wire [ 1:0] chosen_operand;
     wire input_ready, computation_ready;

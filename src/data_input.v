@@ -147,8 +147,8 @@ module data_input (
                 clear <= 0;
             end else if (deb_C_out) begin
                 chosen_adder <= KOGGE_STONE;
-                if (clear) clear <= 1;  // clear the result and go back to the input state
-                else clear <= 0;
+                if (clear) clear <= 0;  // clear the result and go back to the input state
+                else clear <= 1;
             end else if (deb_D_out) begin
                 operandA <= sw;
                 chosen_operand <= OPERAND_A;
