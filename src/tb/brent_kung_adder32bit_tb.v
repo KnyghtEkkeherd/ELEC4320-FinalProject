@@ -11,6 +11,7 @@ module testbench;
   brent_kung_adder32bit uut (
     .outputFinal(outputFinal),
     .carryOutFinal(carryOutFinal),
+    .out(), // unused
     .in1(a),
     .in2(b),
     .carryIn(carryIn)
