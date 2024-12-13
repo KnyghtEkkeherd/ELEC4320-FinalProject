@@ -49,7 +49,7 @@ module arithm (
             case (chosen_adder)
                 BRENT_KUNG: begin
                     result = brent_kung_sum[15:0];
-                    overflow_flag = brent_kung_sum[16];
+                    overflow_flag = brent;
                     computation_ready = 1;
                 end
                 KOGGE_STONE: begin
