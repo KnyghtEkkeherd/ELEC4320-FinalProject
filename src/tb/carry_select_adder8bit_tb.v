@@ -31,13 +31,13 @@ module testbench;
     a = 8'h0A; 
     b = 8'h0B; 
     #10;
-    $display("A: %h, B: %h => Sum: %h, Cout: %b (Expected: Sum: ??, Cout: ??)", a, b, sum, cout);
+    $display("A: %h, B: %h => Sum: %h, Cout: %b (Expected: Sum: 15, Cout: 0)", a, b, sum, cout);
 
     // Test case 4
     a = 8'h12; 
     b = 8'h34; 
     #10;
-    $display("A: %h, B: %h => Sum: %h, Cout: %b (Expected: Sum: FF, Cout: 0)", a, b, sum, cout);
+    $display("A: %h, B: %h => Sum: %h, Cout: %b (Expected: Sum: 46, Cout: 0)", a, b, sum, cout);
 
     // Test case 5
     a = 8'hAA; 
