@@ -22,6 +22,7 @@ module arithm (
 
     wire [15:0] ksa_sum;
     wire ksa_cout;
+    wire [16:0] brent_kung_sum;
 
     kogge_stone_adder16bit KSA (
         .A(operandA),
@@ -29,6 +30,13 @@ module arithm (
         .Cin(1'b0),
         .S(ksa_sum),
         .Cout(ksa_cout)
+    );
+
+    brent_kung_adder16bit BKU (
+        .in1(operandA),
+        .in2(operandB),
+        .carryIn(1'b0),
+        .out(brent_kung_sum)
     );
 
     // Put the adder modules here:
@@ -40,7 +48,8 @@ module arithm (
         end else if (en) begin
             case (chosen_adder)
                 BRENT_KUNG: begin
-                    result = 0;
+                    result = brent_kung_sum[15:0];
+                    overflow_flag = brent;
                     computation_ready = 1;
                 end
                 KOGGE_STONE: begin
