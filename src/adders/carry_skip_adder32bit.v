@@ -79,7 +79,7 @@ module carry_skip_adder_32bit (
     output Cout
 );
 
-    wire [3:0] C[7:0];
+    wire [7:0] C;
 
     carry_skip_adder_block csab0 (
         .A(A[3:0]),

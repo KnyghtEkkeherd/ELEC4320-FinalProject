@@ -13,14 +13,14 @@ module full_adder (
     output cout,
     output p
 );
-    assign sum  = a ^ b ^ cin;
+    assign sum = a ^ b ^ cin;
     assign cout = (a & b) | ((a ^ b) & cin);
     assign p = a ^ b;
 endmodule
 
 module carry_skip_adder_block (
-// most optimal configuration for 8 bit carry skip adder is to use m = sqrt(8/2) = 2 bit blocks
-// k = n/m, where k is the numebr of blocks needed and n is the number of input bits
+    // most optimal configuration for 8 bit carry skip adder is to use m = sqrt(8/2) = 2 bit blocks
+    // k = n/m, where k is the numebr of blocks needed and n is the number of input bits
     input [1:0] A,
     input [1:0] B,
     input Cin,
@@ -52,15 +52,15 @@ module carry_skip_adder_block (
     );
 endmodule
 
-module carry_skip_adder8bit(
-input [7:0] A,
-input [7:0] B,
-input Cin,
-output [7:0] Sum,
-output Cout
+module carry_skip_adder8bit (
+    input [7:0] A,
+    input [7:0] B,
+    input Cin,
+    output [7:0] Sum,
+    output Cout
 );
 
-    wire [1:0] C[3:0];
+    wire [3:0] C;
 
     carry_skip_adder_block csab0 (
         .A(A[1:0]),
