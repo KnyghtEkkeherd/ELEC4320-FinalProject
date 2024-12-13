@@ -22,7 +22,7 @@ module arithm (
 
     wire [15:0] ksa_sum;
     wire ksa_cout;
-    wire [15:0] brent_kung_sum;
+    wire [16:0] brent_kung_sum;
 
     kogge_stone_adder16bit KSA (
         .A(operandA),
@@ -48,7 +48,8 @@ module arithm (
         end else if (en) begin
             case (chosen_adder)
                 BRENT_KUNG: begin
-                    result = brent_kung_sum;
+                    result = brent_kung_sum[15:0];
+                    overflow_flag = brent_kung_sum[16];
                     computation_ready = 1;
                 end
                 KOGGE_STONE: begin

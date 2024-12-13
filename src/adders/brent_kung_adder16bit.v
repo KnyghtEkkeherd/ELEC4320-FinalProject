@@ -22,15 +22,15 @@ module AndOrInvert (
     assign out[1] = in1 | (in2 & in3);
 endmodule
 
-module brent_kung_adder16bit (
+module BrentKungAdder16bit (
     out,
     in1,
     in2,
     carryIn
 );
     output [16:0] out;
+    output carryOut;
     input [15:0] in1, in2;
-    input carryIn;
 
     wire [15:0] generateSignals, propagateSignals;
     wire [14:0] stage1Signals;
