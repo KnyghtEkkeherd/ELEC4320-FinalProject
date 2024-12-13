@@ -11,8 +11,10 @@
         assign out[1] = in1 | (in2 & in3);
     endmodule
 
-    module BrentKungAdder32Bit(out, in1, in2, carryIn);
+    module brent_kung_adder32bit(out, outputFinal, carryOutFinal, in1, in2, carryIn);
         output [32:0] out;
+        output [31:0] outputFinal;
+        output carryOutFinal;
         input [31:0] in1, in2;
         input carryIn;
 
@@ -206,4 +208,7 @@
 
         assign out[31:0] = in1 ^ in2 ^ {carrySignals[30:0], carryIn};
         assign out[32] = carrySignals[31];
+
+        assign outputFinal = out[31:0];
+        assign carryOutFinal = out[32];
     endmodule
