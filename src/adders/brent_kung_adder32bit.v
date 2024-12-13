@@ -1,3 +1,5 @@
+// Outputs carryOutFinal as a separate variable
+
     module OrAndInvert(out, in1, in2, in3);
         output out;
         input in1, in2, in3;
