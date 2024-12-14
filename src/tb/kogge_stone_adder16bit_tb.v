@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module tb_kogge_stone_adder16bit;
+module kogge_stone_adder16bit_tb;
 
     reg [15:0] a;            // Input A
     reg [15:0] b;            // Input B

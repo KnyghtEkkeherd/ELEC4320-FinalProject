@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module testbench;
+module brent_kung_adder32bit_tb;
 
   reg [31:0] a, b;
   reg carryIn; // Add carryIn signal

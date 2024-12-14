@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module carry_skip_adder_tb;
+module carry_skip_adder32bit_tb;
     reg [31:0] a, b;   // Inputs
     reg carryIn;       // Carry input
     wire [31:0] sum;   // Sum output

@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module tb_carry_skip_adder16bit;
+module carry_skip_adder16bit_tb;
 
     reg [15:0] a, b;  // Declare input registers
     reg carryIn;      // Carry input

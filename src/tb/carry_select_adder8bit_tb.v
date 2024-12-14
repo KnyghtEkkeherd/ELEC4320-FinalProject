@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module testbench;
+module carry_select_adder8bit_tb;
 
   reg [7:0] a, b;
   wire [7:0] sum;

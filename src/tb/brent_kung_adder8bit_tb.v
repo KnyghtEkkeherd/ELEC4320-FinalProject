@@ -5,7 +5,7 @@
 
 `timescale 1ns / 1ps
 
-module testbench;
+module brent_kung_adder8bit_tb;
 
   reg [7:0] in1, in2;
   reg carryIn;
