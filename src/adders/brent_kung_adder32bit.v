@@ -3,16 +3,16 @@
 // Email: adayal@connect.ust.hk
 //////////////////////////////////////////////////////////////////////////////////
 
-module OrAndInvert(output out, input in1, in2, in3);
+module OrAndInvert (output out, input in1, in2, in3);
     assign out = in1 | (in2 & in3);
 endmodule
 
-module AndOrInvert(output [1:0] out, input in1, in2, in3, in4);
+module AndOrInvert (output [1:0] out, input in1, in2, in3, in4);
     assign out[0] = in2 & in4;
     assign out[1] = in1 | (in2 & in3);
 endmodule
 
-module brent_kung_adder32bit(output [32:0] out, 
+module brent_kung_adder32bit (output [32:0] out, 
                              input [31:0] in1, in2, input carryIn);
 
     wire [31:0] generateSignals, propagateSignals;
