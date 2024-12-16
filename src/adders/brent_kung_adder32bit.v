@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Name: Armaan Dayal
 // Email: adayal@connect.ust.hk
+// This code is based on https://github.com/sids174/Brent-Kung-32-bit-Adder.git
 //////////////////////////////////////////////////////////////////////////////////
 
 module OrAndInvert (output out, input in1, in2, in3);
@@ -12,9 +13,7 @@ module AndOrInvert (output [1:0] out, input in1, in2, in3, in4);
     assign out[1] = in1 | (in2 & in3);
 endmodule
 
-module brent_kung_adder32bit (output [32:0] out, 
-                             input [31:0] in1, in2, input carryIn);
-
+module brent_kung_adder32bit (output [32:0] out, input [31:0] in1, in2, input carryIn);
     wire [31:0] generateSignals, propagateSignals;
     wire [30:0] stage1Signals;
     wire [14:0] stage2Signals;
